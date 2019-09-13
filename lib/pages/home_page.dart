@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
         ),
         body: TabBarView(children: [
           Container(
-            color: Colors.green,
+
           ),
           Container(
             color: Colors.greenAccent,
