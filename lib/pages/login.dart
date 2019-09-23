@@ -80,7 +80,7 @@ class _LoginState extends State<Login> {
 
     print("E-mail: $email senha: $senha");
 
-    push(context, HomePage());
+    push(context, HomePage(), isReplace: true);
   }
 
   String _validatorEmail(String value) {
