@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:queimadas/pages/lista_focus.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -14,9 +15,7 @@ class HomePage extends StatelessWidget {
           ]),
         ),
         body: TabBarView(children: [
-          Container(
-
-          ),
+         ListaFocus(),
           Container(
             color: Colors.greenAccent,
           )

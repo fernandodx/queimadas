@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Queimadas',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: Colors.lightGreen,
         scaffoldBackgroundColor: Color(0xFFfff6fe)
 
       ),

@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:queimadas/pages/home_page.dart';
+import 'package:queimadas/pages/lista_focus_api.dart';
+import 'package:queimadas/utils/nav.dart';
+import 'package:queimadas/widgets/app_button_default.dart';
+import 'package:queimadas/widgets/app_text_default.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -23,7 +28,10 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Cadastro"),
+        title: Text(
+          "Cadastro",
+          style: TextStyle(color: Colors.white),
+        ),
         centerTitle: true,
       ),
       body: Form(
@@ -32,7 +40,7 @@ class _LoginState extends State<Login> {
           margin: EdgeInsets.all(16),
           child: ListView(
             children: <Widget>[
-              _textField(
+              AppTextDefault(
                 name: "E-mail",
                 controller: emailTextController,
                 validator: _validatorEmail,
@@ -41,64 +49,23 @@ class _LoginState extends State<Login> {
                 nextFocus: _focusSenha,
               ),
               SizedBox(height: 15),
-              _textField(
-                  name: "Senha",
-                  controller: senhaTextControlller,
-                  validator: _validatorSenha,
-                  inputType: TextInputType.number,
-                  inputAction: TextInputAction.done,
-                  focus: _focusSenha,
-                  isPassword: true),
+              AppTextDefault(
+                name: "Senha",
+                controller: senhaTextControlller,
+                validator: _validatorSenha,
+                inputType: TextInputType.number,
+                inputAction: TextInputAction.done,
+                focus: _focusSenha,
+                isPassword: true,
+              ),
               SizedBox(height: 15),
-              _createButtonDefault("Entrar", _onClickLogin),
+              AppButtonDefault(
+                label: "Entrar",
+                onPressed: _onClickLogin,
+              )
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  RaisedButton _createButtonDefault(String label, Function onPressed) {
-    return RaisedButton(
-      child: Text(
-        label,
-        style: TextStyle(
-          fontSize: 17,
-        ),
-      ),
-      color: Colors.redAccent,
-      textColor: Colors.white,
-      onPressed: onPressed,
-    );
-  }
-
-  TextFormField _textField({
-    @required String name,
-    String hint = "",
-    bool isPassword = false,
-    TextEditingController controller,
-    FormFieldValidator<String> validator,
-    TextInputType inputType,
-    TextInputAction inputAction,
-    FocusNode focus,
-    FocusNode nextFocus,
-  }) {
-    return TextFormField(
-      controller: controller,
-      validator: validator,
-      obscureText: isPassword,
-      keyboardType: inputType,
-      focusNode: focus,
-      textInputAction: inputAction,
-      onFieldSubmitted: (value) {
-        print(value);
-        if(nextFocus != null){
-          FocusScope.of(context).requestFocus(nextFocus);
-        }
-      },
-      decoration: InputDecoration(
-        labelText: name,
-        hintText: hint,
       ),
     );
   }
@@ -112,6 +79,8 @@ class _LoginState extends State<Login> {
     var senha = senhaTextControlller.text;
 
     print("E-mail: $email senha: $senha");
+
+    push(context, HomePage());
   }
 
   String _validatorEmail(String value) {
