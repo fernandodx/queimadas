@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:queimadas/pages/lista_focus.dart';
+import 'package:queimadas/pages/listaFocus/lista_focus.dart';
+import 'package:queimadas/pages/login/login.dart';
+import 'package:queimadas/utils/nav.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -29,11 +31,22 @@ class HomePage extends StatelessWidget {
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: NetworkImage("https://avatarfiles.alphacoders.com/115/115265.png"),
                 ),
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text("Sair"),
+                subtitle: Text("Finalizar sessão"),
+                onTap: () => _onClickLogout(context),
               )
             ],
           ),
         ),
       ),
     );
+  }
+
+  _onClickLogout(BuildContext context) {
+    Navigator.pop(context);
+    push(context, Login(), isReplace: true);
   }
 }

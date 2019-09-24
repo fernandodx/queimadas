@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/home_page.dart';
-import 'package:queimadas/pages/lista_focus_api.dart';
+import 'package:queimadas/pages/listaFocus/lista_focus_api.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/widgets/app_button_default.dart';
 import 'package:queimadas/widgets/app_text_default.dart';

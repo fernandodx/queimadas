@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:queimadas/Focus.dart';
 import 'package:queimadas/ResponseApi.dart';
-import 'package:queimadas/pages/datail_focus.dart';
+import 'package:queimadas/pages/listaFocus/datail_focus.dart';
 
 
 class ListaFocusApi {
