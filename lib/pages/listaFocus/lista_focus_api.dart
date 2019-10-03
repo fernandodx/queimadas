@@ -4,13 +4,18 @@ import 'package:http/http.dart' as http;
 import 'package:queimadas/Focus.dart';
 import 'package:queimadas/ResponseApi.dart';
 import 'package:queimadas/pages/listaFocus/datail_focus.dart';
+import 'package:queimadas/utils/prefs.dart';
 
 
 class ListaFocusApi {
 
+  static final String LAST_LIST_FOCUS_KEY = "last_list_focus";
+
  static Future<ResponseApi<List<Focus>>> findFocus() async {
 
    try{
+
+     await Future.delayed(Duration(seconds: 3));
 
      var url = 'http://queimadas.dgi.inpe.br/queimadas/dados-abertos/api/focos/count';
 
@@ -23,6 +28,7 @@ class ListaFocusApi {
      print('Response status: ${response.statusCode}');
 
      if(response.statusCode == 200){
+       Prefs.putString(LAST_LIST_FOCUS_KEY, response.body);
        List<Focus> resultado = Focus.createListFocusWithJson(response.body);
        return ResponseApi.ok(resultado);
      }
@@ -34,6 +40,12 @@ class ListaFocusApi {
      return ResponseApi.error(error.toString());
    }
  }
+
+ static Future<List<Focus>> getLastListFocus() async{
+   String lastListJson = await Prefs.getString(LAST_LIST_FOCUS_KEY);
+   return Focus.createListFocusWithJson(lastListJson);
+ }
+
 
  static Future<ResponseApi<List<DetailFocus>>> findFocusDetail(String pais) async {
 
