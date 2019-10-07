@@ -5,6 +5,7 @@ import 'package:queimadas/utils/nav.dart';
 import '../../Focus.dart';
 import '../../ResponseApi.dart';
 import 'lista_focus_api.dart';
+import 'package:queimadas/utils/alert.dart';
 
 class ListViewFocus extends StatefulWidget {
   @override
@@ -13,43 +14,49 @@ class ListViewFocus extends StatefulWidget {
 
 class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
+
+  List<Focus> listaFocus;
+
   @override
   bool get wantKeepAlive => true;
 
   @override
+  void initState() {
+    super.initState();
+
+    _loadData();
+
+  }
+
+  _loadData() async {
+
+    ListaFocusApi.getLastListFocus().then((ultimaListaFocus) {
+      print("ULTIMA LISTA: ${ultimaListaFocus.length}");
+    });
+
+    ResponseApi<List<Focus>> response = await ListaFocusApi.findFocus();
+    if (response.ok) {
+      print("LISTA ATUAL: ${response.result.length}");
+      setState(() {
+        listaFocus = response.result;
+      });
+    }else{
+      simpleAlert(context, msg: "Não foi possível carregar a lista de focus");
+    }
+
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
-    Future<ResponseApi<List<Focus>>> future = ListaFocusApi.findFocus();
 
-    return FutureBuilder(
-      future: future,
-      builder: (context, snapShot) {
-        if (!snapShot.hasData) {
-          return Center(
-            child: CircularProgressIndicator(
-              strokeWidth: 5.0,
-            ),
-          );
-        }
+    if(listaFocus == null){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-        ResponseApi response = snapShot.data;
-
-        if (response.ok) {
-          List<Focus> listaFocus = response.result;
-          ListaFocusApi.getLastListFocus().then((listaFocus) {
-            print("ULTIMA LISTA: ${listaFocus.length}");
-          });
-
-          print("LISTA ATUAL: ${listaFocus.length}");
-
-          return _listaViewFocus(listaFocus);
-        } else {
-          return Center(
-            child: Text("TELA DE ERRO"),
-          );
-        }
-      },
-    );
+    return _listaViewFocus(listaFocus);
   }
 
   _onClickDetalhar(focus) {
