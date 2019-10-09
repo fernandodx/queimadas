@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
+import 'package:queimadas/utils/alert.dart';
 import 'package:queimadas/utils/nav.dart';
 
-import '../../Focus.dart';
-import '../../ResponseApi.dart';
+import '../../focus_fire.dart';
+import '../../response_api.dart';
 import 'lista_focus_api.dart';
-import 'package:queimadas/utils/alert.dart';
 
 class ListViewFocus extends StatefulWidget {
   @override
@@ -15,7 +15,7 @@ class ListViewFocus extends StatefulWidget {
 class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
 
-  List<Focus> listaFocus;
+  List<FocusFire> listaFocus;
 
   @override
   bool get wantKeepAlive => true;
@@ -34,7 +34,7 @@ class _ListViewFocusState extends State<ListViewFocus>
       print("ULTIMA LISTA: ${ultimaListaFocus.length}");
     });
 
-    ResponseApi<List<Focus>> response = await ListaFocusApi.findFocus();
+    ResponseApi<List<FocusFire>> response = await ListaFocusApi.findFocus();
     if (response.ok) {
       print("LISTA ATUAL: ${response.result.length}");
       setState(() {
@@ -63,12 +63,12 @@ class _ListViewFocusState extends State<ListViewFocus>
     push(context, DetalheFocus(focus));
   }
 
-  _listaViewFocus(List<Focus> listaFocus) {
+  _listaViewFocus(List<FocusFire> listaFocus) {
     return Container(
       child: ListView.builder(
           itemCount: listaFocus.length,
           itemBuilder: (context, index) {
-            Focus focus = listaFocus[index];
+            FocusFire focus = listaFocus[index];
             return Card(
               elevation: 16,
               margin: EdgeInsets.all(16),

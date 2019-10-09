@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:queimadas/Focus.dart';
+import 'package:queimadas/focus_fire.dart';
+import 'package:queimadas/utils/text_util.dart';
 
 class DetalheFocus extends StatelessWidget {
-  Focus focus;
+  FocusFire focus;
 
   DetalheFocus(this.focus);
 
@@ -11,16 +12,42 @@ class DetalheFocus extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(focus.country),
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.favorite,
+              ),
+              onPressed: _onClickFavorite()),
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: _onClickShared(),
+          ),
+          PopupMenuButton<String>(
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: "EDITAR",
+                  child: Text("editar"),
+                ),
+                PopupMenuItem(
+                  value: "EXCLUIR",
+                  child: Text("Excluir"),
+                )
+              ];
+            },
+          )
+        ],
       ),
       body: Center(
         child: Container(
           padding: EdgeInsets.all(16),
-          child: Text(
-            "Quantidade de Focus: ${focus.count}",
-            style: TextStyle(fontSize: 35),
-          ),
+          child: TextUtil.textDefault("Quantidade de Focus: ${focus.count}"),
         ),
       ),
     );
   }
+
+  _onClickFavorite() {}
+
+  _onClickShared() {}
 }

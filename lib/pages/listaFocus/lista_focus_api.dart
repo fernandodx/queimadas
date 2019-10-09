@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:queimadas/Focus.dart';
-import 'package:queimadas/ResponseApi.dart';
+import 'package:queimadas/focus_fire.dart';
+import 'package:queimadas/response_api.dart';
 import 'package:queimadas/pages/listaFocus/datail_focus.dart';
 import 'package:queimadas/utils/prefs.dart';
 
@@ -11,7 +11,7 @@ class ListaFocusApi {
 
   static final String LAST_LIST_FOCUS_KEY = "last_list_focus";
 
- static Future<ResponseApi<List<Focus>>> findFocus() async {
+ static Future<ResponseApi<List<FocusFire>>> findFocus() async {
 
    try{
 
@@ -29,7 +29,7 @@ class ListaFocusApi {
 
      if(response.statusCode == 200){
        Prefs.putString(LAST_LIST_FOCUS_KEY, response.body);
-       List<Focus> resultado = Focus.createListFocusWithJson(response.body);
+       List<FocusFire> resultado = FocusFire.createListFocusWithJson(response.body);
        return ResponseApi.ok(resultado);
      }
 
@@ -41,9 +41,9 @@ class ListaFocusApi {
    }
  }
 
- static Future<List<Focus>> getLastListFocus() async{
+ static Future<List<FocusFire>> getLastListFocus() async{
    String lastListJson = await Prefs.getString(LAST_LIST_FOCUS_KEY);
-   return Focus.createListFocusWithJson(lastListJson);
+   return FocusFire.createListFocusWithJson(lastListJson);
  }
 
 
