@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
+import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
+import 'package:queimadas/utils/alert.dart';
 import 'package:queimadas/utils/nav.dart';
+import 'package:queimadas/widgets/text_error.dart';
 
 import '../../Focus.dart';
-import '../../ResponseApi.dart';
-import 'lista_focus_api.dart';
-import 'package:queimadas/utils/alert.dart';
 
 class ListViewFocus extends StatefulWidget {
   @override
@@ -14,49 +14,46 @@ class ListViewFocus extends StatefulWidget {
 
 class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
-
-  List<Focus> listaFocus;
+  var _bloc = ListaFocusBloc();
 
   @override
   bool get wantKeepAlive => true;
 
   @override
+  void dispose() {
+    super.dispose();
+
+    _bloc.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
 
-    _loadData();
-
-  }
-
-  _loadData() async {
-
-    ListaFocusApi.getLastListFocus().then((ultimaListaFocus) {
-      print("ULTIMA LISTA: ${ultimaListaFocus.length}");
-    });
-
-    ResponseApi<List<Focus>> response = await ListaFocusApi.findFocus();
-    if (response.ok) {
-      print("LISTA ATUAL: ${response.result.length}");
-      setState(() {
-        listaFocus = response.result;
-      });
-    }else{
-      simpleAlert(context, msg: "Não foi possível carregar a lista de focus");
-    }
-
+    _bloc.fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    if(listaFocus == null){
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    return StreamBuilder(
+      stream: _bloc.stream,
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+//          simpleAlert(context, msg: "ERRO"); Descobrir porque não funcionou
+          return TextError(snapshot.error);
+        }
 
-    return _listaViewFocus(listaFocus);
+        if (snapshot.hasData) {
+          return _listaViewFocus(snapshot.data);
+        }
+
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
+    );
   }
 
   _onClickDetalhar(focus) {
