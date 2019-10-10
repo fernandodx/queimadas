@@ -1,15 +1,15 @@
 import 'dart:async';
 
-import 'package:queimadas/Focus.dart';
+import 'package:queimadas/focus_fire.dart';
 
-import '../../ResponseApi.dart';
+import '../../response_api.dart';
 import 'lista_focus_api.dart';
 
 class ListaFocusBloc {
 
-  final _listaFocusConstroller = StreamController<List<Focus>>();
+  final _listaFocusConstroller = StreamController<List<FocusFire>>();
 
-  Stream<List<Focus>> get stream => _listaFocusConstroller.stream;
+  Stream<List<FocusFire>> get stream => _listaFocusConstroller.stream;
 
 
   fetch() async {
@@ -17,7 +17,7 @@ class ListaFocusBloc {
       print("ULTIMA LISTA: ${ultimaListaFocus.length}");
     });
 
-    ResponseApi<List<Focus>> response = await ListaFocusApi.findFocus();
+    ResponseApi<List<FocusFire>> response = await ListaFocusApi.findFocus();
 
     if (response.ok) {
       print("LISTA ATUAL: ${response.result.length}");

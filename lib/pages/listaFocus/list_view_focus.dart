@@ -5,7 +5,7 @@ import 'package:queimadas/utils/alert.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/widgets/text_error.dart';
 
-import '../../Focus.dart';
+import '../../focus_fire.dart';
 
 class ListViewFocus extends StatefulWidget {
   @override
@@ -60,12 +60,12 @@ class _ListViewFocusState extends State<ListViewFocus>
     push(context, DetalheFocus(focus));
   }
 
-  _listaViewFocus(List<Focus> listaFocus) {
+  _listaViewFocus(List<FocusFire> listaFocus) {
     return Container(
       child: ListView.builder(
           itemCount: listaFocus.length,
           itemBuilder: (context, index) {
-            Focus focus = listaFocus[index];
+            FocusFire focus = listaFocus[index];
             return Card(
               elevation: 16,
               margin: EdgeInsets.all(16),
