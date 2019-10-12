@@ -12,7 +12,7 @@ class ListaFocusBloc {
   Stream<List<FocusFire>> get stream => _listaFocusConstroller.stream;
 
 
-  fetch() async {
+  Future<List<FocusFire>> fetch() async {
     ListaFocusApi.getLastListFocus().then((ultimaListaFocus) {
       print("ULTIMA LISTA: ${ultimaListaFocus.length}");
     });
@@ -22,10 +22,11 @@ class ListaFocusBloc {
     if (response.ok) {
       print("LISTA ATUAL: ${response.result.length}");
       _listaFocusConstroller.add(response.result);
-
     } else {
       _listaFocusConstroller.addError(response.msg);
     }
+
+    return response.result;
   }
 
 

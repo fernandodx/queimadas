@@ -3,21 +3,33 @@ import 'package:queimadas/focus_fire.dart';
 import 'package:queimadas/pages/detalheFocus/detail_focus_bloc.dart';
 import 'package:queimadas/utils/text_util.dart';
 
-class DetalheFocus extends StatelessWidget {
+class DetalheFocus extends StatefulWidget {
 
-  final _blocText = DetailFocusBloc();
   FocusFire focus;
   DetalheFocus(this.focus);
+
+  @override
+  _DetalheFocusState createState() => _DetalheFocusState();
+}
+
+class _DetalheFocusState extends State<DetalheFocus> {
+
+  final _blocText = DetailFocusBloc();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _blocText.fetch();
+
+  }
 
 
   @override
   Widget build(BuildContext context) {
-
-    _blocText.fetch();
-
     return Scaffold(
       appBar: AppBar(
-        title: Text(focus.country),
+        title: Text(widget.focus.country),
         actions: <Widget>[
           IconButton(
               icon: Icon(
@@ -51,7 +63,7 @@ class DetalheFocus extends StatelessWidget {
           children: <Widget>[
             Container(
               padding: EdgeInsets.all(16),
-              child: TextUtil.textDefault("Quantidade de Focus: ${focus.count}"),
+              child: TextUtil.textDefault("Quantidade de Focus: ${widget.focus.count}"),
             ),
             SizedBox(height: 20),
             StreamBuilder(

@@ -15,7 +15,7 @@ class ListaFocusApi {
 
    try{
 
-     await Future.delayed(Duration(seconds: 3));
+     await Future.delayed(Duration(seconds: 1));
 
      var url = 'http://queimadas.dgi.inpe.br/queimadas/dados-abertos/api/focos/count';
 

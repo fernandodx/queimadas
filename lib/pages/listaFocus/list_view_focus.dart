@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
-import 'package:queimadas/utils/alert.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/widgets/text_error.dart';
 
@@ -61,69 +60,77 @@ class _ListViewFocusState extends State<ListViewFocus>
   }
 
   _listaViewFocus(List<FocusFire> listaFocus) {
-    return Container(
-      child: ListView.builder(
-          itemCount: listaFocus.length,
-          itemBuilder: (context, index) {
-            FocusFire focus = listaFocus[index];
-            return Card(
-              elevation: 16,
-              margin: EdgeInsets.all(16),
-              child: Column(
-                children: <Widget>[
-                  Image.network(
-                      "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg"),
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    child: Row(
-                      children: <Widget>[
-                        Image.network(
-                            "https://www.countryflags.io/br/flat/64.png"),
-                        Container(
-                          margin: EdgeInsets.only(
-                              left: 12.0, top: 0, right: 0, bottom: 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                focus.country,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 25,
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: Container(
+        child: ListView.builder(
+            itemCount: listaFocus.length,
+            itemBuilder: (context, index) {
+              FocusFire focus = listaFocus[index];
+              return Card(
+                elevation: 16,
+                margin: EdgeInsets.all(16),
+                child: Column(
+                  children: <Widget>[
+                    Image.network(
+                        "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg"),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: Row(
+                        children: <Widget>[
+                          Image.network(
+                              "https://www.countryflags.io/br/flat/64.png"),
+                          Container(
+                            margin: EdgeInsets.only(
+                                left: 12.0, top: 0, right: 0, bottom: 0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  focus.country,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                "Quantidade: ${focus.count}",
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: 18,
+                                Text(
+                                  "Quantidade: ${focus.count}",
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  ButtonTheme.bar(
-                    child: ButtonBar(
-                      children: <Widget>[
-                        FlatButton(
-                            onPressed: () => _onClickDetalhar(focus),
-                            child: Text("Detalhar")),
-                        FlatButton(
-                          onPressed: () {},
-                          child: Text("Favoritar"),
-                        )
-                      ],
+                    ButtonTheme.bar(
+                      child: ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                              onPressed: () => _onClickDetalhar(focus),
+                              child: Text("Detalhar")),
+                          FlatButton(
+                            onPressed: () {},
+                            child: Text("Favoritar"),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            );
-          }),
+                  ],
+                ),
+              );
+            }),
+      ),
     );
+  }
+
+  Future<void> _onRefresh() {
+    print("LISTA ATUALIZADO");
+    return _bloc.fetch();
   }
 }
