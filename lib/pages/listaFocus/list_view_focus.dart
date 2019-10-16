@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
@@ -72,14 +73,14 @@ class _ListViewFocusState extends State<ListViewFocus>
                 margin: EdgeInsets.all(16),
                 child: Column(
                   children: <Widget>[
-                    Image.network(
-                        "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg"),
+                    CachedNetworkImage(imageUrl: "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg",
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),),
                     Container(
                       padding: EdgeInsets.all(8),
                       child: Row(
                         children: <Widget>[
-                          Image.network(
-                              "https://www.countryflags.io/br/flat/64.png"),
+                          CachedNetworkImage(imageUrl: "https://www.countryflags.io/br/flat/64.png"),
                           Container(
                             margin: EdgeInsets.only(
                                 left: 12.0, top: 0, right: 0, bottom: 0),
