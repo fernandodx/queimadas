@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/home_page.dart';
+import 'package:queimadas/pages/login/login_bloc.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/widgets/app_button_default.dart';
 import 'package:queimadas/widgets/app_text_default.dart';
@@ -11,6 +12,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final _bloc = LoginBloc();
+
   final emailTextController = TextEditingController();
 
   final senhaTextControlller = TextEditingController();
@@ -43,7 +46,7 @@ class _LoginState extends State<Login> {
               AppTextDefault(
                 name: "E-mail",
                 controller: emailTextController,
-                validator: _validatorEmail,
+                validator: _bloc.validatorEmail,
                 inputType: TextInputType.emailAddress,
                 inputAction: TextInputAction.next,
                 nextFocus: _focusSenha,
@@ -52,7 +55,7 @@ class _LoginState extends State<Login> {
               AppTextDefault(
                 name: "Senha",
                 controller: senhaTextControlller,
-                validator: _validatorSenha,
+                validator: _bloc.validatorSenha,
                 inputType: TextInputType.number,
                 inputAction: TextInputAction.done,
                 focus: _focusSenha,
@@ -83,20 +86,5 @@ class _LoginState extends State<Login> {
     push(context, HomePage(), isReplace: true);
   }
 
-  String _validatorEmail(String value) {
-    if (value.isEmpty) {
-      return "E-mail é obrigatório";
-    }
-    return null;
-  }
 
-  String _validatorSenha(String value) {
-    if (value.isEmpty) {
-      return "Senha é obrigatório";
-    }
-    if (value.length < 8) {
-      return "Sua senha tem que ter no minímo 8 dígitos";
-    }
-    return null;
-  }
 }
