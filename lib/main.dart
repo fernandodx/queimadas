@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:queimadas/pages/SplashScrenn.dart';
 import 'package:queimadas/pages/home_page.dart';
 import 'package:queimadas/pages/login/login.dart';
 
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
 
       ),
 //      home: HomePage(),
-    home: Login(),
+    home: SplashScreen(),
     );
   }
 }

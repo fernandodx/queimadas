@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:queimadas/pages/api/lorem_ipsum.dart';
+import 'package:queimadas/pages/listaFocus/lista_focus_api.dart';
 
 class DetailFocusBloc {
 
@@ -10,6 +11,10 @@ class DetailFocusBloc {
   Stream<String> get strem => _detailController.stream;
 
   fetch() async {
+
+    var response = await ListaFocusApi.findFocusDetail("Brasil");
+
+
 
     var textoGenerico = _textLorem ?? await LoremIpsumApi().findTextRandom();
 
