@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddFocusFireBloc {
 
@@ -20,6 +21,11 @@ class AddFocusFireBloc {
     }
 
     print("OK onPress ${descricaoController.text} - ${dataController.text}");
+
+  }
+
+  addImage() {
+
 
   }
 

@@ -21,8 +21,11 @@ class AddFocusFire extends StatelessWidget {
           padding: EdgeInsets.all(16),
           child: ListView(
             children: <Widget>[
-              CachedNetworkImage(
-                imageUrl: "https://s3.amazonaws.com/bucket-gw-cni-static-cms-si/portaldaindustria/noticias/media/imagem_plugin_ca42790d-93a8-4f49-abba-527bc1e30d9a.jpg",
+              IconButton(
+                onPressed: () => _bloc.addImage(),
+                icon: CachedNetworkImage(
+                  imageUrl: "https://s3.amazonaws.com/bucket-gw-cni-static-cms-si/portaldaindustria/noticias/media/imagem_plugin_ca42790d-93a8-4f49-abba-527bc1e30d9a.jpg",
+                ),
               ),
               SizedBox(height: 20,),
               AppTextDefault(
@@ -50,6 +53,8 @@ class AddFocusFire extends StatelessWidget {
       ),
     );
   }
+
+
 
 
 }
