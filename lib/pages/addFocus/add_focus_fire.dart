@@ -6,7 +6,6 @@ import 'package:queimadas/widgets/app_button_default.dart';
 import 'package:queimadas/widgets/app_text_default.dart';
 
 class AddFocusFire extends StatelessWidget {
-
   final _bloc = AddFocusFireBloc();
 
   @override
@@ -24,10 +23,13 @@ class AddFocusFire extends StatelessWidget {
               IconButton(
                 onPressed: () => _bloc.addImage(),
                 icon: CachedNetworkImage(
-                  imageUrl: "https://s3.amazonaws.com/bucket-gw-cni-static-cms-si/portaldaindustria/noticias/media/imagem_plugin_ca42790d-93a8-4f49-abba-527bc1e30d9a.jpg",
+                  imageUrl:
+                      "https://s3.amazonaws.com/bucket-gw-cni-static-cms-si/portaldaindustria/noticias/media/imagem_plugin_ca42790d-93a8-4f49-abba-527bc1e30d9a.jpg",
                 ),
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               AppTextDefault(
                 name: "Descrição",
                 hint: "Descrição",
@@ -35,14 +37,18 @@ class AddFocusFire extends StatelessWidget {
                 controller: _bloc.descricaoController,
                 inputType: TextInputType.text,
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               AppTextDefault(
                 name: "Data",
                 hint: "Data",
                 controller: _bloc.dataController,
                 inputType: TextInputType.datetime,
               ),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               AppButtonDefault(
                 label: "Adicionar",
                 onPressed: () => _bloc.onPressAdd(),
@@ -53,8 +59,4 @@ class AddFocusFire extends StatelessWidget {
       ),
     );
   }
-
-
-
-
 }
