@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 
 
 class AddFocusFireBloc {
@@ -24,8 +25,10 @@ class AddFocusFireBloc {
 
   }
 
-  addImage() {
+  addImage() async {
 
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    print(image);
 
   }
 
