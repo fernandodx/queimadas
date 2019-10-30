@@ -89,7 +89,7 @@ class _AddFocusFireState extends State<AddFocusFire> {
 
   addImage() async {
 
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     print("FILE IMAGE: ${image.toString()}");
 
 
