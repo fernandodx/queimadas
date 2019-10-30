@@ -32,6 +32,10 @@ class AddFocusFireBloc {
 
   }
 
+  void dispse() {
+
+  }
+
 
 
 }

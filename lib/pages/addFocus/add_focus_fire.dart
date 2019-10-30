@@ -47,13 +47,10 @@ class _AddFocusFireState extends State<AddFocusFire> {
           padding: EdgeInsets.all(16),
           child: ListView(
             children: <Widget>[
-              IconButton(
-                onPressed: () => addImage(),
-                icon: CachedNetworkImage(
-                  imageUrl: "https://st2.depositphotos.com/2498595/7199/v/950/depositphotos_71992665-stock-illustration-photo-camera-icon-map-pin.jpg",
-                ),
+              InkWell(
+                onTap: () => addImage(),
+                child: _getImageCamera(),
               ),
-              _getImageCamera(),
               SizedBox(
                 height: 20,
               ),
@@ -92,10 +89,17 @@ class _AddFocusFireState extends State<AddFocusFire> {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     print("FILE IMAGE: ${image.toString()}");
 
+    if(image != null){
+      setState(() {
+        file = image;
+      });
+    }
 
-    setState(() {
-      file = image;
-    });
+  }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _bloc.dispse();
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/SplashScrenn.dart';
-import 'package:queimadas/pages/home_page.dart';
-import 'package:queimadas/pages/login/login.dart';
+
+//Local de variáveis globais
 
 void main() => runApp(MyApp());
 
