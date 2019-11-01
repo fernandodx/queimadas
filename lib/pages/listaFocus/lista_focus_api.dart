@@ -23,7 +23,7 @@ class ListaFocusApi {
        "Content-Type" : "application/json"
      };
 
-     var response = await http.get(url, headers: headers);
+     var response = await http.get(url, headers: headers).timeout(Duration(seconds: 15));
 
      print('Response status: ${response.statusCode}');
 
@@ -57,7 +57,7 @@ class ListaFocusApi {
        "Content-Type" : "application/json"
      };
 
-     var response = await http.get(url, headers: headers);
+     var response = await http.get(url, headers: headers).timeout(Duration(seconds: 15));
 
      print('Response status: ${response.statusCode}');
 

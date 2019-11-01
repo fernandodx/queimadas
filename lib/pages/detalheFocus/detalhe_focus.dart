@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:queimadas/focus_fire.dart';
 import 'package:queimadas/pages/detalheFocus/detail_focus_bloc.dart';
 import 'package:queimadas/utils/text_util.dart';
@@ -14,13 +15,13 @@ class DetalheFocus extends StatefulWidget {
 
 class _DetalheFocusState extends State<DetalheFocus> {
 
-  final _blocText = DetailFocusBloc();
+  DetailFocusBloc get _detailFocusBloc => Provider.of<DetailFocusBloc>(context);
 
   @override
   void initState() {
     super.initState();
 
-    _blocText.fetch();
+    _detailFocusBloc.fetch();
 
   }
 
@@ -67,7 +68,7 @@ class _DetalheFocusState extends State<DetalheFocus> {
             ),
             SizedBox(height: 20),
             StreamBuilder(
-                stream: _blocText.strem,
+                stream: _detailFocusBloc.strem,
                 initialData: "Carregando",
                 builder: (context, snapshot) {
 

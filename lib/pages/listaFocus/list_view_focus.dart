@@ -1,8 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:queimadas/model/lista_focus_model.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
 import 'package:queimadas/utils/nav.dart';
+import 'package:queimadas/utils/text_util.dart';
+import 'package:queimadas/widgets/app_text_default.dart';
 import 'package:queimadas/widgets/text_error.dart';
 
 import '../../focus_fire.dart';
@@ -14,7 +18,8 @@ class ListViewFocus extends StatefulWidget {
 
 class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
-  var _bloc = ListaFocusBloc();
+
+//  var _bloc = ListaFocusBloc();
 
   @override
   bool get wantKeepAlive => true;
@@ -23,37 +28,55 @@ class _ListViewFocusState extends State<ListViewFocus>
   void dispose() {
     super.dispose();
 
-    _bloc.dispose();
+//    _bloc.dispose();
   }
 
   @override
   void initState() {
     super.initState();
 
-    _bloc.fetch();
+    ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context, listen: false);
+    listaFocusModel.atualizarListaFocusFire();
+//    _bloc.fetch();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return StreamBuilder(
-      stream: _bloc.stream,
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-//          simpleAlert(context, msg: "ERRO"); Descobrir porque não funcionou
-          return TextError(snapshot.error);
-        }
+    ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context);
 
-        if (snapshot.hasData) {
-          return _listaViewFocus(snapshot.data);
-        }
+    if(listaFocusModel.listaFocusFire == null){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
-        return Center(
-          child: CircularProgressIndicator(),
-        );
-      },
-    );
+    if(listaFocusModel.listaFocusFire.isNotEmpty){
+      return _listaViewFocus(listaFocusModel.listaFocusFire);
+    }else{
+      return Center(
+        child: TextUtil.textTitulo("Não Existe nenhum Focus de fogo"),
+      );
+    }
+
+//    return StreamBuilder(
+//      stream: _bloc.stream,
+//      builder: (context, snapshot) {
+//        if (snapshot.hasError) {
+////          simpleAlert(context, msg: "ERRO"); Descobrir porque não funcionou
+//          return TextError(snapshot.error);
+//        }
+//
+//        if (snapshot.hasData) {
+//          return _listaViewFocus(snapshot.data);
+//        }
+//
+//        return Center(
+//          child: CircularProgressIndicator(),
+//        );
+//      },
+//    );
   }
 
   _onClickDetalhar(focus) {
@@ -138,6 +161,6 @@ class _ListViewFocusState extends State<ListViewFocus>
 
   Future<void> _onRefresh() {
     print("LISTA ATUALIZADO");
-    return _bloc.fetch();
+    return Provider.of<ListaFocusModel>(context, listen: false).atualizarListaFocusFire();
   }
 }
