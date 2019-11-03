@@ -14,25 +14,15 @@ class AddFocusFire extends StatefulWidget {
 }
 
 class _AddFocusFireState extends State<AddFocusFire> {
-  final _bloc = AddFocusFireBloc();
 
-  File file;
+  final _bloc = AddFocusFireBloc();
 
   @override
   void initState() {
     super.initState();
 
-  }
+    _bloc.fetch();
 
-  Widget _getImageCamera() {
-
-    if(file != null) {
-      return Image.file(file);
-    }
-
-    return CachedNetworkImage(
-      imageUrl: "https://s3.amazonaws.com/bucket-gw-cni-static-cms-si/portaldaindustria/noticias/media/imagem_plugin_ca42790d-93a8-4f49-abba-527bc1e30d9a.jpg",
-    );
   }
 
   @override
@@ -47,10 +37,7 @@ class _AddFocusFireState extends State<AddFocusFire> {
           padding: EdgeInsets.all(16),
           child: ListView(
             children: <Widget>[
-              InkWell(
-                onTap: () => addImage(),
-                child: _getImageCamera(),
-              ),
+              getStreamBuilder(context),
               SizedBox(
                 height: 20,
               ),
@@ -84,22 +71,32 @@ class _AddFocusFireState extends State<AddFocusFire> {
     );
   }
 
-  addImage() async {
+  StreamBuilder<Widget> getStreamBuilder(context) {
+    return StreamBuilder(
+              stream: _bloc.stream,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return TextUtil.textTitulo("Erro ao carregar a imagem");
+                }
 
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    print("FILE IMAGE: ${image.toString()}");
+                if (snapshot.hasData) {
+                  return InkWell(
+                    child: snapshot.data,
+                    onTap: () => _bloc.addImage(context),
+                  );
+                }
 
-    if(image != null){
-      setState(() {
-        file = image;
-      });
-    }
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
 
+              },
+    );
   }
 
   @override
   void dispose() {
     super.dispose();
-    _bloc.dispse();
+    _bloc.dispose();
   }
 }

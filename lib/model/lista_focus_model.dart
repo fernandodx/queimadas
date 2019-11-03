@@ -9,8 +9,11 @@ class ListaFocusModel  extends ChangeNotifier{
   List<FocusFire> listaFocusFire = null;
 
   Future<ResponseApi> atualizarListaFocusFire() async {
+
     ListaFocusApi.getLastListFocus().then((ultimaListaFocus) {
-      print("ULTIMA LISTA: ${ultimaListaFocus.length}");
+      if(ultimaListaFocus != null){
+        print("ULTIMA LISTA: ${ultimaListaFocus.length}");
+      }
     });
 
     ResponseApi<List<FocusFire>> response = await ListaFocusApi.findFocus();

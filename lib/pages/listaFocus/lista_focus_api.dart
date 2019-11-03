@@ -43,7 +43,11 @@ class ListaFocusApi {
 
  static Future<List<FocusFire>> getLastListFocus() async{
    String lastListJson = await Prefs.getString(LAST_LIST_FOCUS_KEY);
-   return FocusFire.createListFocusWithJson(lastListJson);
+   if(lastListJson != null && lastListJson.isNotEmpty){
+     return FocusFire.createListFocusWithJson(lastListJson);
+   }else{
+     return [];
+   }
  }
 
 

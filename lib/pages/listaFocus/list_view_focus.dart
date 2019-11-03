@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/model/lista_focus_model.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
+import 'package:queimadas/response_api.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/text_util.dart';
 import 'package:queimadas/widgets/app_text_default.dart';
@@ -20,16 +24,10 @@ class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
 
 //  var _bloc = ListaFocusBloc();
+  StreamSubscription<TipoEvento> subscription;
 
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void dispose() {
-    super.dispose();
-
-//    _bloc.dispose();
-  }
 
   @override
   void initState() {
@@ -37,6 +35,13 @@ class _ListViewFocusState extends State<ListViewFocus>
 
     ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context, listen: false);
     listaFocusModel.atualizarListaFocusFire();
+
+    final stream = MainEventBus().get(context).stream;
+    subscription = stream.listen((TipoEvento tipo){
+        print("EVENTO RECEBIDO: $tipo");
+    });
+
+
 //    _bloc.fetch();
   }
 
@@ -56,7 +61,7 @@ class _ListViewFocusState extends State<ListViewFocus>
       return _listaViewFocus(listaFocusModel.listaFocusFire);
     }else{
       return Center(
-        child: TextUtil.textTitulo("Não Existe nenhum Focus de fogo"),
+        child: TextUtil.textDefault("Não Existe nenhum Focus de fogo"),
       );
     }
 
@@ -162,5 +167,14 @@ class _ListViewFocusState extends State<ListViewFocus>
   Future<void> _onRefresh() {
     print("LISTA ATUALIZADO");
     return Provider.of<ListaFocusModel>(context, listen: false).atualizarListaFocusFire();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    subscription.cancel();
+
+//    _bloc.dispose();
   }
 }
