@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:share/share.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class AddFocusFireBloc {
@@ -69,6 +70,7 @@ class AddFocusFireBloc {
 
   _onShared() {
     print("shared");
-    Share.share("http://google.com.br");
+//    Share.share("http://google.com.br");
+    launch("https://www.youtube.com/watch?v=siEkVgo5hTE");
   }
 }
