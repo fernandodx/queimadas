@@ -20,6 +20,7 @@ simpleAlert(
               FlatButton(
                 onPressed: () {
                   Navigator.pop(context);
+                  onPressOk();
                 },
                 child: Text("OK"),
               ),

@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
+import 'package:queimadas/utils/alert_bottom_sheet.dart';
+import 'package:share/share.dart';
 
 
 class AddFocusFireBloc {
@@ -38,13 +40,14 @@ class AddFocusFireBloc {
     return null;
   }
 
-  onPressAdd() {
+  onPressAdd(context) {
     if(!keyForm.currentState.validate()){
       return;
     }
 
-    print("OK onPress ${descricaoController.text} - ${dataController.text}");
-
+    alertBottomSheet(context,
+        msg: "OK onPress ${descricaoController.text} - ${dataController.text}",
+        onPressOk: _onShared );
   }
 
   addImage(context) async {
@@ -63,4 +66,9 @@ class AddFocusFireBloc {
 
 
 
+
+  _onShared() {
+    print("shared");
+    Share.share("http://google.com.br");
+  }
 }

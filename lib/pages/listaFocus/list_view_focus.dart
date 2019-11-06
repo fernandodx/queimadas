@@ -8,6 +8,7 @@ import 'package:queimadas/model/lista_focus_model.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
 import 'package:queimadas/response_api.dart';
+import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/text_util.dart';
 import 'package:queimadas/widgets/app_text_default.dart';
@@ -22,7 +23,6 @@ class ListViewFocus extends StatefulWidget {
 
 class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
-
 //  var _bloc = ListaFocusBloc();
   StreamSubscription<TipoEvento> subscription;
 
@@ -33,14 +33,14 @@ class _ListViewFocusState extends State<ListViewFocus>
   void initState() {
     super.initState();
 
-    ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context, listen: false);
+    ListaFocusModel listaFocusModel =
+        Provider.of<ListaFocusModel>(context, listen: false);
     listaFocusModel.atualizarListaFocusFire();
 
     final stream = MainEventBus().get(context).stream;
-    subscription = stream.listen((TipoEvento tipo){
-        print("EVENTO RECEBIDO: $tipo");
+    subscription = stream.listen((TipoEvento tipo) {
+      print("EVENTO RECEBIDO: $tipo");
     });
-
 
 //    _bloc.fetch();
   }
@@ -51,15 +51,15 @@ class _ListViewFocusState extends State<ListViewFocus>
 
     ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context);
 
-    if(listaFocusModel.listaFocusFire == null){
+    if (listaFocusModel.listaFocusFire == null) {
       return Center(
         child: CircularProgressIndicator(),
       );
     }
 
-    if(listaFocusModel.listaFocusFire.isNotEmpty){
+    if (listaFocusModel.listaFocusFire.isNotEmpty) {
       return _listaViewFocus(listaFocusModel.listaFocusFire);
-    }else{
+    } else {
       return Center(
         child: TextUtil.textDefault("Não Existe nenhum Focus de fogo"),
       );
@@ -101,12 +101,15 @@ class _ListViewFocusState extends State<ListViewFocus>
                 margin: EdgeInsets.all(16),
                 child: Column(
                   children: <Widget>[
-                    CachedNetworkImage(
-                      imageUrl:
-                          "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg",
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    InkWell(
+                      onLongPress: _onLongPressImage(),
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg",
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                      ),
                     ),
                     Container(
                       padding: EdgeInsets.all(8),
@@ -166,7 +169,8 @@ class _ListViewFocusState extends State<ListViewFocus>
 
   Future<void> _onRefresh() {
     print("LISTA ATUALIZADO");
-    return Provider.of<ListaFocusModel>(context, listen: false).atualizarListaFocusFire();
+    return Provider.of<ListaFocusModel>(context, listen: false)
+        .atualizarListaFocusFire();
   }
 
   @override
@@ -176,5 +180,10 @@ class _ListViewFocusState extends State<ListViewFocus>
     subscription.cancel();
 
 //    _bloc.dispose();
+  }
+
+  _onLongPressImage() {
+
+    alertBottomSheet(context, msg: "On Long Press foi acionado.");
   }
 }

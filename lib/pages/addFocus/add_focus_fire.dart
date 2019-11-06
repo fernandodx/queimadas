@@ -62,7 +62,7 @@ class _AddFocusFireState extends State<AddFocusFire> {
               ),
               AppButtonDefault(
                 label: "Adicionar",
-                onPressed: () => _bloc.onPressAdd(),
+                onPressed: () => _bloc.onPressAdd(context),
               )
             ],
           ),

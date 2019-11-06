@@ -6,11 +6,9 @@ import '../../response_api.dart';
 import 'lista_focus_api.dart';
 
 class ListaFocusBloc {
-
   final _listaFocusConstroller = StreamController<List<FocusFire>>();
 
   Stream<List<FocusFire>> get stream => _listaFocusConstroller.stream;
-
 
   Future<List<FocusFire>> fetch() async {
     ListaFocusApi.getLastListFocus().then((ultimaListaFocus) {
@@ -29,11 +27,7 @@ class ListaFocusBloc {
     return response.result;
   }
 
-
-
   void dispose() {
     _listaFocusConstroller.close();
   }
-
-
 }
