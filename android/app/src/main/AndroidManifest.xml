@@ -16,8 +16,13 @@
         android:label="queimadas"
         android:icon="@mipmap/ic_launcher">
 
+        <!--Trabalho-->
+<!--        <meta-data android:name="com.google.android.geo.API_KEY"-->
+<!--            android:value="AIzaSyAhD6PDO_iY-uy2s30tWXArhg9Ziuw-C0E"/>-->
+
+        <!--Casa-->
         <meta-data android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyAhD6PDO_iY-uy2s30tWXArhg9Ziuw-C0E"/>
+            android:value="AIzaSyCzv8VrLO2vdMo2aeRignGu7Uek3Xm8iCQ"/>
 
         <activity
             android:name=".MainActivity"

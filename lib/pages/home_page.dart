@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/addFocus/add_focus_fire.dart';
+import 'package:queimadas/pages/focusMaps/focus_map.dart';
 import 'package:queimadas/pages/listaFocus/list_view_focus.dart';
 import 'package:queimadas/pages/login/login.dart';
 import 'package:queimadas/utils/alert.dart';
@@ -61,7 +62,7 @@ class _HomePageState extends State<HomePage>
         ),
       ),
       body: TabBarView(controller: _tabController, children: [
-        Container(color: Colors.redAccent),
+        FocusMap(),
         ListViewFocus(),
         Container(color: Colors.greenAccent),
       ]),

@@ -102,7 +102,8 @@ class _ListViewFocusState extends State<ListViewFocus>
                 child: Column(
                   children: <Widget>[
                     InkWell(
-                      onLongPress: _onLongPressImage(),
+                      onLongPress: () => _onLongPressImage(),
+                      onTap: _onClick,
                       child: CachedNetworkImage(
                         imageUrl:
                             "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg",
@@ -185,5 +186,8 @@ class _ListViewFocusState extends State<ListViewFocus>
   _onLongPressImage() {
 
     alertBottomSheet(context, msg: "On Long Press foi acionado.");
+  }
+
+  void _onClick() {
   }
 }
