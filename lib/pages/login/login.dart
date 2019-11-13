@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
 import 'package:queimadas/pages/login/login_bloc.dart';
 import 'package:queimadas/widgets/app_button_default.dart';
 import 'package:queimadas/widgets/app_text_default.dart';
@@ -52,9 +53,10 @@ class _LoginState extends State<Login> {
                 isPassword: true,
               ),
               SizedBox(height: 15),
-              AppButtonDefault(
-                label: "Entrar",
+              GoogleSignInButton(
                 onPressed: () => _bloc.onClickLogin(context),
+                borderRadius: 4.0,
+                text: "Login com Google",
               )
             ],
           ),
@@ -62,8 +64,5 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
-
-
 
 }
