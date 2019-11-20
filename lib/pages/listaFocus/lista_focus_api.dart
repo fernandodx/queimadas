@@ -30,14 +30,14 @@ class ListaFocusApi {
      if(response.statusCode == 200){
        Prefs.putString(LAST_LIST_FOCUS_KEY, response.body);
        List<FocusFire> resultado = FocusFire.createListFocusWithJson(response.body);
-       return ResponseApi.ok(resultado);
+       return ResponseApi.ok(result: resultado);
      }
 
-     return ResponseApi.error(response.body);
+     return ResponseApi.error(msg: response.body);
 
    }catch(error, exception) {
      print("Error: $error - Exception: $exception");
-     return ResponseApi.error(error.toString());
+     return ResponseApi.error(msg: error.toString());
    }
  }
 
@@ -72,14 +72,14 @@ class ListaFocusApi {
          return DetailFocus.fromJson(data);
        }).toList();
 
-       return ResponseApi.ok(lista);
+       return ResponseApi.ok(result: lista);
      }
 
-     return ResponseApi.error(response.body.toString());
+     return ResponseApi.error(msg: response.body.toString());
 
    }catch(error, exception){
      print("Erro: $error - Exeption: $exception");
-     return ResponseApi.error(error.toString());
+     return ResponseApi.error(msg: error.toString());
    }
 
  }

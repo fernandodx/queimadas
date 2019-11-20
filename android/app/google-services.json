@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "846690354038",
+    "firebase_url": "https://queimadas-d566a.firebaseio.com",
+    "project_id": "queimadas",
+    "storage_bucket": "queimadas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:846690354038:android:95ccbf6e574150b39a3057",
+        "android_client_info": {
+          "package_name": "br.com.dias.queimadas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "846690354038-g7uq9pjf9pohnu2nl2ss44durmh8s5rp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.dias.queimadas",
+            "certificate_hash": "92a8cb6603d456e3d5a5007780d1691ebb09b460"
+          }
+        },
+        {
+          "client_id": "846690354038-coa5ek69svvagu39nnh8bsb0hkcgrdse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzv8VrLO2vdMo2aeRignGu7Uek3Xm8iCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "846690354038-coa5ek69svvagu39nnh8bsb0hkcgrdse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

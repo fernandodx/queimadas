@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>846690354038-hlk4obtf96flaig7hk6g83gvt01eik0b.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.846690354038-hlk4obtf96flaig7hk6g83gvt01eik0b</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>846690354038-g7uq9pjf9pohnu2nl2ss44durmh8s5rp.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDkCwxnX7btN2E1H5x8cqAHXnHI_GtMqgs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>846690354038</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>br.com.dias.queimadas</string>
+	<key>PROJECT_ID</key>
+	<string>queimadas</string>
+	<key>STORAGE_BUCKET</key>
+	<string>queimadas.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:846690354038:ios:d4be7faf10de034c9a3057</string>
+	<key>DATABASE_URL</key>
+	<string>https://queimadas-d566a.firebaseio.com</string>
+</dict>
+</plist>
