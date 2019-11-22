@@ -27,13 +27,18 @@ class FirebaseService {
       print("E-mail: ${user.email}");
       print("Foto: ${user.photoUrl}");
 
-      return ResponseApi.ok();
+      return ResponseApi<FirebaseUser>.ok(result: user);
 
     }catch(error){
       print("Login with Google error: $error");
       return ResponseApi.error(msg: error.toString());
     }
 
+  }
+
+  logout() {
+    _auth.signOut();
+    _googleSign.signOut();
   }
 
 

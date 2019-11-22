@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/addFocus/add_focus_fire.dart';
+import 'package:queimadas/pages/api/firebase_service.dart';
 import 'package:queimadas/pages/focusMaps/focus_map.dart';
 import 'package:queimadas/pages/listaFocus/list_view_focus.dart';
 import 'package:queimadas/pages/login/login.dart';
+import 'package:queimadas/pages/login/login_bloc.dart';
 import 'package:queimadas/utils/alert.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/prefs.dart';
@@ -17,6 +20,7 @@ class _HomePageState extends State<HomePage>
   final KEY_ABA_SELECIONADA = "KEY_ABA_SELECIONADA";
   static const int QTD_ABAS = 3;
   TabController _tabController;
+  final _loginBloc = LoginBloc();
 
   @override
   void initState() {
@@ -69,14 +73,14 @@ class _HomePageState extends State<HomePage>
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text("Nome"),
-              accountEmail: Text("E-mail"),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    "https://avatarfiles.alphacoders.com/115/115265.png"),
-              ),
-            ),
+            FutureBuilder<FirebaseUser>(
+                future: FirebaseAuth.instance.currentUser(),
+                builder: (context, snapshot){
+                  if(snapshot.hasData){
+                    return userAccountHeader(snapshot.data);
+                  }
+                  return CircularProgressIndicator();
+            }),
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text("Sair"),
@@ -97,7 +101,18 @@ class _HomePageState extends State<HomePage>
     );
   }
 
+  UserAccountsDrawerHeader userAccountHeader(FirebaseUser user) {
+    return UserAccountsDrawerHeader(
+            accountName: Text(user.displayName),
+            accountEmail: Text(user.email),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(user.photoUrl),
+            ),
+          );
+  }
+
   _onClickLogout(BuildContext context) {
+    FirebaseService().logout();
     Navigator.pop(context);
     push(context, Login(), isReplace: true);
   }
