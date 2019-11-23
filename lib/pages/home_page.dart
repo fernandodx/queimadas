@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/addFocus/add_focus_fire.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
@@ -7,6 +8,7 @@ import 'package:queimadas/pages/listaFocus/list_view_focus.dart';
 import 'package:queimadas/pages/login/login.dart';
 import 'package:queimadas/pages/login/login_bloc.dart';
 import 'package:queimadas/utils/alert.dart';
+import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/prefs.dart';
 
@@ -22,11 +24,21 @@ class _HomePageState extends State<HomePage>
   TabController _tabController;
   final _loginBloc = LoginBloc();
 
+
   @override
   void initState() {
     super.initState();
 
     _initTabController();
+    _checkMsgWelcome();
+
+  }
+
+  void _checkMsgWelcome() async {
+    RemoteConfig remoteConfig = await RemoteConfig.instance;
+    if(remoteConfig.getBool("IS_SHOW_MSG")){
+      alertBottomSheet(context, msg: remoteConfig.getString("MSG_WELLCOME"));
+    }
   }
 
   void _initTabController() {
@@ -103,10 +115,10 @@ class _HomePageState extends State<HomePage>
 
   UserAccountsDrawerHeader userAccountHeader(FirebaseUser user) {
     return UserAccountsDrawerHeader(
-            accountName: Text(user.displayName),
+            accountName: Text(user.displayName ?? ""),
             accountEmail: Text(user.email),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user.photoUrl),
+              backgroundImage: NetworkImage(user.photoUrl ?? "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Bearded_Man-17-512.png"),
             ),
           );
   }

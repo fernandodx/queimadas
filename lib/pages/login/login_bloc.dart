@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
+import 'package:queimadas/pages/cadastro/cadastro.dart';
 import 'package:queimadas/response_api.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/prefs.dart';
@@ -34,44 +35,53 @@ class LoginBloc {
     return null;
   }
 
-  saveSharedPrefs(FirebaseUser user) {
-    Prefs.putString("USER_NAME", user.displayName);
-    Prefs.putString("USER_EMAIL", user.email);
-    Prefs.putString("USER_URL_PHOTO", user.photoUrl);
+  saveDateLoginSharedPrefs(DateTime time) {
+    Prefs.putInt("LAST_LOGIN", time.millisecondsSinceEpoch);
   }
 
-  Future<String> getNameUser() async {
-    return Prefs.getString("USER_NAME");
+  Future<String> getDateLastLogin() async {
+    final dateTime = await Prefs.getInt("LAST_LOGIN");
+    final date = DateTime.fromMicrosecondsSinceEpoch(dateTime);
+    return "${date.day}/${date.month}/${date.year}";
   }
-  Future<String> getUserEmail() async {
-    return Prefs.getString("USER_EMAIL");
-  }
-  Future<String> getUserUrlPhoto() async {
-    return Prefs.getString("USER_URL_PHOTO");
-  }
+
 
   onClickLogin(BuildContext context) async {
-//    if (!formKey.currentState.validate()) {
-//      return;
-//    }
-//
-//    var email = emailTextController.text;
-//    var senha = senhaTextControlller.text;
-//
-//    print("E-mail: $email senha: $senha");
-//
-//    push(context, HomePage(), isReplace: true);
+      if (!formKey.currentState.validate()) {
+        return;
+      }
 
-      ResponseApi<FirebaseUser> response = await FirebaseService().loginWithGoogle();
+      var email = emailTextController.text;
+      var pass = senhaTextControlller.text;
+
+      ResponseApi<FirebaseUser> response = await FirebaseService().loginWithEmailAndPassword(email, pass);
 
       if(response.ok){
-        saveSharedPrefs(response.result);
+        saveDateLoginSharedPrefs(DateTime.now());
         push(context, HomePage(), isReplace: true);
       }else{
         print(response.msg);
       }
 
   }
+
+  onClickLoginGoogle(BuildContext context) async {
+
+    ResponseApi<FirebaseUser> response = await FirebaseService().loginWithGoogle();
+
+    if(response.ok){
+      saveDateLoginSharedPrefs(DateTime.now());
+      push(context, HomePage(), isReplace: true);
+    }else{
+      print(response.msg);
+    }
+
+  }
+
+  initSignIn(context) {
+    push(context, Cadastro());
+  }
+
 
 
 

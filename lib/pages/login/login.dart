@@ -53,16 +53,28 @@ class _LoginState extends State<Login> {
                 isPassword: true,
               ),
               SizedBox(height: 15),
-              GoogleSignInButton(
+              AppButtonDefault(
+                label: "Entrar",
                 onPressed: () => _bloc.onClickLogin(context),
+              ),
+              GoogleSignInButton(
+                onPressed: () => _bloc.onClickLoginGoogle(context),
                 borderRadius: 4.0,
                 text: "Login com Google",
-              )
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              AppButtonDefault(
+                label: "Não tenho cadastro",
+                decoration: TextDecoration.underline,
+                onPressed: () => _bloc.initSignIn(context),
+                type: TypeButton.FLAT,
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
 }

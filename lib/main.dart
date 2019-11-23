@@ -1,3 +1,4 @@
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
@@ -10,7 +11,39 @@ import 'package:queimadas/pages/detalheFocus/detail_focus_bloc.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+
+    _initDefaultFirebaseRemoteConfig();
+
+
+  }
+
+  void _initDefaultFirebaseRemoteConfig() async {
+    final RemoteConfig remoteConfig = await RemoteConfig.instance;
+
+    Map<String, dynamic> defaults = {
+      'MSG_WELLCOME': 'Olá Bem vindo ao app Queimadas! OFFLINE',
+      'IS_SHOW_MSG': true
+    };
+
+    //Alterar para subir para produção
+    remoteConfig.setDefaults(defaults);
+    remoteConfig.fetch(expiration: const Duration(minutes: 1));
+    remoteConfig.activateFetched();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
