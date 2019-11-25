@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:convert' as convert;
 
 class FocusFire {
 
@@ -8,7 +8,7 @@ class FocusFire {
   FocusFire(this.country, this.count);
 
   static createListFocusWithJson(resposeJson) {
-    Map focusMap = json.decode(resposeJson);
+    Map focusMap = convert.json.decode(resposeJson);
     List<FocusFire> listaFocus = List();
 
     focusMap.forEach((key, value) {
@@ -17,6 +17,19 @@ class FocusFire {
     });
 
     return listaFocus;
+  }
+
+
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['country'] = this.country;
+    data['count'] = this.count;
+    return data;
+  }
+
+  String toJson() {
+    String json = convert.json.encode(toMap());
+    return json;
   }
 
 }
