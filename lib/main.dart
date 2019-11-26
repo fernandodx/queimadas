@@ -64,7 +64,7 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         title: 'Queimadas',
         theme: ThemeData(
-            primarySwatch: Colors.lightGreen,
+            primarySwatch: Colors.green,
             scaffoldBackgroundColor: Color(0xFFfff6fe)),
 //      home: HomePage(),
         home: SplashScreen(),

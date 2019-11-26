@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/model/lista_focus_model.dart';
+import 'package:queimadas/pages/api/firebase_service.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/firestore/focus_fire_service.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
@@ -17,13 +18,13 @@ import 'package:queimadas/widgets/text_error.dart';
 
 import '../../focus_fire.dart';
 
-class ListViewFocus extends StatefulWidget {
+class ListViewMonitorFocus extends StatefulWidget {
   @override
-  _ListViewFocusState createState() => _ListViewFocusState();
+  _ListViewMonitorFocusState createState() => _ListViewMonitorFocusState();
 }
 
-class _ListViewFocusState extends State<ListViewFocus>
-    with AutomaticKeepAliveClientMixin<ListViewFocus> {
+class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
+    with AutomaticKeepAliveClientMixin<ListViewMonitorFocus> {
 //  var _bloc = ListaFocusBloc();
   StreamSubscription<TipoEvento> subscription;
 
@@ -34,9 +35,9 @@ class _ListViewFocusState extends State<ListViewFocus>
   void initState() {
     super.initState();
 
-    ListaFocusModel listaFocusModel =
-        Provider.of<ListaFocusModel>(context, listen: false);
-    listaFocusModel.atualizarListaFocusFire();
+//    ListaFocusModel listaFocusModel =
+//        Provider.of<ListaFocusModel>(context, listen: false);
+//    listaFocusModel.atualizarListaFocusFire();
 
     final stream = MainEventBus().get(context).stream;
     subscription = stream.listen((TipoEvento tipo) {
@@ -50,21 +51,48 @@ class _ListViewFocusState extends State<ListViewFocus>
   Widget build(BuildContext context) {
     super.build(context);
 
-    ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context);
+    FocusFireService service = FocusFireService();
 
-    if (listaFocusModel.listaFocusFire == null) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
+    return StreamBuilder(
+        stream: service.getMonitorFocusFire(),
+        builder: (context, snapshot) {
 
-    if (listaFocusModel.listaFocusFire.isNotEmpty) {
-      return _listaViewFocus(listaFocusModel.listaFocusFire);
-    } else {
-      return Center(
-        child: TextUtil.textDefault("Não Existe nenhum Focus de fogo"),
-      );
-    }
+          if(snapshot.hasData){
+
+            var listaFocus = _listaViewFocus(service.toList(snapshot));
+            if (listaFocus.isNotEmpty) {
+              return _listaViewFocus(listaFocus);
+            } else {
+              return Center(
+                child: TextUtil.textDefault("Não Existe nenhum Focus Favorito"),
+              );
+            }
+          }
+
+          if (snapshot.hasError) {
+            return TextError(snapshot.error);
+          }
+
+          return CircularProgressIndicator();
+
+        });
+
+
+//    ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context);
+
+//    if (listaFocusModel.listaFocusFire == null) {
+//      return Center(
+//        child: CircularProgressIndicator(),
+//      );
+//    }
+
+//    if (listaFocusModel.listaFocusFire.isNotEmpty) {
+//      return _listaViewFocus(listaFocusModel.listaFocusFire);
+//    } else {
+//      return Center(
+//        child: TextUtil.textDefault("Não Existe nenhum Focus de fogo"),
+//      );
+//    }
 
 //    return StreamBuilder(
 //      stream: _bloc.stream,

@@ -19,6 +19,10 @@ class FocusFire {
     return listaFocus;
   }
 
+  static fromMap(focusMap){
+    return FocusFire(focusMap["country"], focusMap["count"]);
+  }
+
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

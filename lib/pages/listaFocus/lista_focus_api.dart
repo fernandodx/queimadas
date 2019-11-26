@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:queimadas/focus_fire.dart';
+import 'package:queimadas/pages/firestore/focus_fire_service.dart';
 import 'package:queimadas/response_api.dart';
 import 'package:queimadas/pages/listaFocus/datail_focus.dart';
 import 'package:queimadas/utils/prefs.dart';
@@ -30,6 +31,11 @@ class ListaFocusApi {
      if(response.statusCode == 200){
        Prefs.putString(LAST_LIST_FOCUS_KEY, response.body);
        List<FocusFire> resultado = FocusFire.createListFocusWithJson(response.body);
+       FocusFireService service =  FocusFireService();
+       resultado.forEach((focusFire) {
+        service.saveFocusFire(focusFire);
+       });
+
        return ResponseApi.ok(result: resultado);
      }
 

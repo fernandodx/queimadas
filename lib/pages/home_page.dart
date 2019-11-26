@@ -5,6 +5,7 @@ import 'package:queimadas/pages/addFocus/add_focus_fire.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
 import 'package:queimadas/pages/focusMaps/focus_map.dart';
 import 'package:queimadas/pages/listaFocus/list_view_focus.dart';
+import 'package:queimadas/pages/listaFocus/list_view_monitor_focus.dart';
 import 'package:queimadas/pages/login/login.dart';
 import 'package:queimadas/pages/login/login_bloc.dart';
 import 'package:queimadas/utils/alert.dart';
@@ -60,6 +61,8 @@ class _HomePageState extends State<HomePage>
       appBar: AppBar(
         title: Text("Queimadas"),
         bottom: TabBar(
+          indicatorColor: Colors.grey,
+          labelColor: Colors.white,
           controller: _tabController,
           tabs: [
             Tab(
@@ -71,8 +74,8 @@ class _HomePageState extends State<HomePage>
               icon: Icon(Icons.list),
             ),
             Tab(
-              text: "DADOS",
-              icon: Icon(Icons.pie_chart),
+              text: "FAVORITOS",
+              icon: Icon(Icons.favorite),
             ),
           ],
         ),
@@ -80,7 +83,7 @@ class _HomePageState extends State<HomePage>
       body: TabBarView(controller: _tabController, children: [
         FocusMap(),
         ListViewFocus(),
-        Container(color: Colors.greenAccent),
+        ListViewMonitorFocus(),
       ]),
       drawer: Drawer(
         child: ListView(
