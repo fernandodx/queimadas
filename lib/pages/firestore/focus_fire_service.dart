@@ -1,10 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:queimadas/focus_fire.dart';
+import 'package:queimadas/pages/api/firebase_service.dart';
 
 class FocusFireService {
 
-  CollectionReference get _focusFireStore => Firestore.instance.collection("focusFire");
+  CollectionReference get _focusFireStore {
+    DocumentReference ref = Firestore.instance.collection("users").document(fireBaseUserUid);
+    return ref.collection("focusFire");
+  }
+
   CollectionReference get _monitorFocusFire => Firestore.instance.collection("monitorFocusFire");
 
   Stream<QuerySnapshot> getFocusFire() => _focusFireStore.snapshots();

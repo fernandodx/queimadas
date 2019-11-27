@@ -155,10 +155,21 @@ class _ListViewFocusState extends State<ListViewFocus>
                             onPressed: () => _onClickDetalhar(focus),
                             icon: Icon(Icons.data_usage, color: Colors.lightGreen,),
                           ),
-                          IconButton(
-                            onPressed: () => _onClickMonitorarFocus(focus),
-                            icon: Icon(Icons.favorite_border, color: Colors.grey,),
-                          ),
+                          FutureBuilder<bool>(
+                              future: FocusFireService().isExist(focus),
+                              builder: (context,  snapshot) {
+
+                                ColorSwatch colorFavorite = Colors.redAccent;
+                                if(snapshot.hasData && snapshot.data){
+                                  colorFavorite = Colors.grey;
+                                }
+
+                                return IconButton(
+                                  onPressed: () => _onClickMonitorarFocus(focus),
+                                  icon: Icon(Icons.favorite_border, color: colorFavorite,),
+                                );
+                              }
+                          )
                         ],
                       ),
                     ),

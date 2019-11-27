@@ -1,7 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:queimadas/response_api.dart';
+
+String fireBaseUserUid;
 
 class FirebaseService {
 
@@ -31,6 +34,8 @@ class FirebaseService {
     try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       final FirebaseUser user = await result.user;
+
+      _saveUser(user);
 
       if(name != null || urlPhoto != null){
         final updateUser = UserUpdateInfo();
@@ -66,6 +71,7 @@ class FirebaseService {
 
       AuthResult result = await _auth.signInWithCredential(credential);
       final FirebaseUser user = await result.user;
+      _saveUser(user);
       print("Login realizado com sucesso!!!");
       print("Nome: ${user.displayName}");
       print("E-mail: ${user.email}");
@@ -78,6 +84,14 @@ class FirebaseService {
       return ResponseApi.error(msg: error.toString());
     }
 
+  }
+
+  _saveUser(FirebaseUser user){
+    if(user != null){
+      fireBaseUserUid = user.uid;
+      DocumentReference refUsers = Firestore.instance.collection("users").document(fireBaseUserUid);
+      refUsers.setData({"name" : user.displayName, "e-mail" : user.email });
+    }
   }
 
   logout() {

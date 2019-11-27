@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +29,38 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     _initDefaultFirebaseRemoteConfig();
+    _initFcm();
+
+
+  }
+
+  void _initFcm(){
+
+    FirebaseMessaging fcm = FirebaseMessaging();
+    fcm.getToken().then((token) => print("TOKEN FCM = $token"));
+
+    fcm.configure(
+      onMessage: (Map<String, dynamic> messages) async {
+        print("onMessage: $messages");
+      },
+      onLaunch: (Map<String, dynamic> messages) async {
+        print("onLaunch: $messages");
+      },
+      onResume: (Map<String, dynamic> messages) async {
+        print("onResume: $messages");
+      }
+    );
+
+    if(Platform.isIOS){
+      fcm.requestNotificationPermissions((IosNotificationSettings(
+        sound: true,
+        badge: true,
+        alert: true
+      )));
+      fcm.onIosSettingsRegistered.listen((IosNotificationSettings settings){
+        print("IOS Settings : $settings");
+      });
+    }
 
 
   }
