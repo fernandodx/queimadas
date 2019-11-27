@@ -20,7 +20,9 @@ class FocusFire {
   }
 
   static fromMap(focusMap){
-    return FocusFire(focusMap["country"], focusMap["count"]);
+    var country = focusMap["country"] ?? "País";
+    var count = focusMap["count"] ?? 0;
+    return FocusFire(country, count);
   }
 
 

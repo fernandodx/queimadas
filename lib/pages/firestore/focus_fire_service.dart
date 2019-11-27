@@ -11,11 +11,13 @@ class FocusFireService {
   Stream<QuerySnapshot> getMonitorFocusFire() => _monitorFocusFire.snapshots();
 
 
-  List<FocusFire> toList(AsyncSnapshot<QuerySnapshot> snapshot){
-    return snapshot.data.documents.map( (document) {
-          print(document);
-          FocusFire.fromMap(document.data);
-    }).toList();
+  toList(AsyncSnapshot<QuerySnapshot> snapshot){
+
+    var lista = snapshot.data.documents.map(
+            (document) => FocusFire.fromMap(document.data)
+    ).toList();
+
+    return lista;
   }
 
 

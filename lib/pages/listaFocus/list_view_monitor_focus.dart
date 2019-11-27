@@ -59,7 +59,7 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
 
           if(snapshot.hasData){
 
-            var listaFocus = _listaViewFocus(service.toList(snapshot));
+            var listaFocus = service.toList(snapshot);
             if (listaFocus.isNotEmpty) {
               return _listaViewFocus(listaFocus);
             } else {
