@@ -45,7 +45,7 @@ android {
         versionName flutterVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        multiDexEnable true
+//        multiDexEnable true
     }
 
     buildTypes {
