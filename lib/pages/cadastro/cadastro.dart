@@ -15,6 +15,8 @@ class _CadastroState extends State<Cadastro> {
   @override
   void initState() {
     super.initState();
+
+    _bloc.fetch();
   }
 
   @override
@@ -33,6 +35,27 @@ class _CadastroState extends State<Cadastro> {
           margin: EdgeInsets.all(16),
           child: ListView(
             children: <Widget>[
+              Column(
+                children: <Widget>[
+                  StreamBuilder<Widget>(
+                    stream: _bloc.stremPicture,
+                    builder: (context, snapshot){
+
+                      if(snapshot.hasData){
+
+                        return InkWell(
+                          child: snapshot.data,
+                          onTap: () => _bloc.onAddImage(),
+                        );
+                      }
+
+                      return CircularProgressIndicator();
+
+                    },
+                  )
+                ],
+              ),
+              SizedBox(height: 15),
               AppTextDefault(
                 name: "Nome",
                 controller: _bloc.nomeTextController,
