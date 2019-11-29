@@ -24,7 +24,7 @@ class ListViewFocus extends StatefulWidget {
 
 class _ListViewFocusState extends State<ListViewFocus>
     with AutomaticKeepAliveClientMixin<ListViewFocus> {
-//  var _bloc = ListaFocusBloc();
+  var _bloc = ListaFocusBloc();
   StreamSubscription<TipoEvento> subscription;
 
   @override
@@ -43,7 +43,7 @@ class _ListViewFocusState extends State<ListViewFocus>
       print("EVENTO RECEBIDO: $tipo");
     });
 
-//    _bloc.fetch();
+    _bloc.fetch();
   }
 
   @override
@@ -97,6 +97,7 @@ class _ListViewFocusState extends State<ListViewFocus>
             itemCount: listaFocus.length,
             itemBuilder: (context, index) {
               FocusFire focus = listaFocus[index];
+              _bloc.fetchTeste(focus);
               return Card(
                 elevation: 16,
                 margin: EdgeInsets.all(16),
@@ -155,13 +156,13 @@ class _ListViewFocusState extends State<ListViewFocus>
                             onPressed: () => _onClickDetalhar(focus),
                             icon: Icon(Icons.data_usage, color: Colors.lightGreen,),
                           ),
-                          FutureBuilder<bool>(
-                              future: FocusFireService().isExist(focus),
+                          StreamBuilder<bool>(
+                              stream: _bloc.streamFavorito,
                               builder: (context,  snapshot) {
 
-                                ColorSwatch colorFavorite = Colors.redAccent;
+                                ColorSwatch colorFavorite = Colors.grey;
                                 if(snapshot.hasData && snapshot.data){
-                                  colorFavorite = Colors.grey;
+                                  colorFavorite = Colors.redAccent;
                                 }
 
                                 return IconButton(
@@ -204,7 +205,8 @@ class _ListViewFocusState extends State<ListViewFocus>
   void _onClick() {
   }
 
-  _onClickMonitorarFocus(FocusFire focus) {
-    FocusFireService().saveMonitorFocus(focus);
+  _onClickMonitorarFocus(FocusFire focus) async {
+    var isExiste = await FocusFireService().saveMonitorFocus(focus);
+    _bloc.atualizarFavorito(isExiste);
   }
 }

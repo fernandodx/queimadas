@@ -1,14 +1,17 @@
 import 'dart:async';
 
 import 'package:queimadas/focus_fire.dart';
+import 'package:queimadas/pages/firestore/focus_fire_service.dart';
 
 import '../../response_api.dart';
 import 'lista_focus_api.dart';
 
 class ListaFocusBloc {
   final _listaFocusConstroller = StreamController<List<FocusFire>>();
+  final _favoritoController = StreamController<bool>.broadcast();
 
   Stream<List<FocusFire>> get stream => _listaFocusConstroller.stream;
+  Stream<bool> get streamFavorito => _favoritoController.stream;
 
   Future<List<FocusFire>> fetch() async {
     ListaFocusApi.getLastListFocus().then((ultimaListaFocus) {
@@ -25,6 +28,17 @@ class ListaFocusBloc {
     }
 
     return response.result;
+  }
+
+  fetchTeste(focus) async {
+
+    bool isExiste = await FocusFireService().isExist(focus);
+    _favoritoController.add(isExiste);
+
+  }
+
+  void atualizarFavorito(isExiste) {
+    _favoritoController.add(isExiste);
   }
 
   void dispose() {

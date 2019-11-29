@@ -11,7 +11,10 @@ class FocusFireService {
     return ref.collection("focusFire");
   }
 
-  CollectionReference get _monitorFocusFire => Firestore.instance.collection("monitorFocusFire");
+  CollectionReference get _monitorFocusFire {
+    DocumentReference ref = Firestore.instance.collection("users").document(fireBaseUserUid);
+    return ref.collection("monitorFocusFire");
+  }
 
   Stream<QuerySnapshot> getFocusFire() => _focusFireStore.snapshots();
   Stream<QuerySnapshot> getMonitorFocusFire() => _monitorFocusFire.snapshots();
@@ -19,11 +22,12 @@ class FocusFireService {
 
   toList(AsyncSnapshot<QuerySnapshot> snapshot){
 
-    var lista = snapshot.data.documents.map(
-            (document) => FocusFire.fromMap(document.data)
-    ).toList();
-
-    return lista;
+    var map = snapshot.data.documents.map<FocusFire>(
+        (document) {
+          return FocusFire.fromMap(document.data);
+        }
+    );
+    return map.toList();
   }
 
 
@@ -33,8 +37,10 @@ class FocusFireService {
 
     if(!snapshot.exists){
       document.setData(focus.toMap());
+      return true;
     }else{
       document.delete();
+      return false;
     }
 
   }
@@ -55,7 +61,8 @@ class FocusFireService {
   }
 
   Future<bool> isExist(FocusFire focus) async {
-    var document = await _focusFireStore.document(focus.country).get();
+    var document = await _monitorFocusFire.document(focus.country).get();
+
     return document.exists;
   }
 

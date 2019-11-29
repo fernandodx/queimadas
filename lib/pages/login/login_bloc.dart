@@ -58,6 +58,8 @@ class LoginBloc {
 
       if(response.ok){
         saveDateLoginSharedPrefs(DateTime.now());
+        FirebaseUser user = await FirebaseAuth.instance.currentUser();
+        FirebaseService().saveUser(user);
         push(context, HomePage(), isReplace: true);
       }else{
         print(response.msg);
