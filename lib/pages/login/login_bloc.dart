@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
@@ -54,12 +56,10 @@ class LoginBloc {
       var email = emailTextController.text;
       var pass = senhaTextControlller.text;
 
-      ResponseApi<FirebaseUser> response = await FirebaseService().loginWithEmailAndPassword(email, pass);
+      ResponseApi<FirebaseUser> response = await FirebaseService().loginWithEmailAndPassword(context, email, pass);
 
       if(response.ok){
         saveDateLoginSharedPrefs(DateTime.now());
-        FirebaseUser user = await FirebaseAuth.instance.currentUser();
-        FirebaseService().saveUser(user);
         push(context, HomePage(), isReplace: true);
       }else{
         print(response.msg);
@@ -69,7 +69,7 @@ class LoginBloc {
 
   onClickLoginGoogle(BuildContext context) async {
 
-    ResponseApi<FirebaseUser> response = await FirebaseService().loginWithGoogle();
+    ResponseApi<FirebaseUser> response = await FirebaseService().loginWithGoogle(context);
 
     if(response.ok){
       saveDateLoginSharedPrefs(DateTime.now());
@@ -81,7 +81,7 @@ class LoginBloc {
   }
 
   initSignIn(context) {
-    push(context, Cadastro());
+    push(context, RegisterOrUpdate());
   }
 
 

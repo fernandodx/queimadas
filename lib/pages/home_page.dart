@@ -1,8 +1,12 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/pages/addFocus/add_focus_fire.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
+import 'package:queimadas/pages/cadastro/cadastro.dart';
 import 'package:queimadas/pages/focusMaps/focus_map.dart';
 import 'package:queimadas/pages/listaFocus/list_view_focus.dart';
 import 'package:queimadas/pages/listaFocus/list_view_monitor_focus.dart';
@@ -20,11 +24,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin<HomePage> {
+
   final KEY_ABA_SELECIONADA = "KEY_ABA_SELECIONADA";
   static const int QTD_ABAS = 3;
   TabController _tabController;
+  StreamSubscription streamSubscription;
   final _loginBloc = LoginBloc();
-
 
   @override
   void initState() {
@@ -33,11 +38,21 @@ class _HomePageState extends State<HomePage>
     _initTabController();
     _checkMsgWelcome();
 
+    streamSubscription =  MainEventBus().get(context).streamUser.listen((user) {
+      print("Usuário UPDATE:  ${user.email}");
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    streamSubscription.cancel();
   }
 
   void _checkMsgWelcome() async {
     RemoteConfig remoteConfig = await RemoteConfig.instance;
-    if(remoteConfig.getBool("IS_SHOW_MSG")){
+    if (remoteConfig.getBool("IS_SHOW_MSG")) {
       alertBottomSheet(context, msg: remoteConfig.getString("MSG_WELLCOME"));
     }
   }
@@ -88,14 +103,29 @@ class _HomePageState extends State<HomePage>
       drawer: Drawer(
         child: ListView(
           children: <Widget>[
-            FutureBuilder<FirebaseUser>(
-                future: FirebaseAuth.instance.currentUser(),
-                builder: (context, snapshot){
-                  if(snapshot.hasData){
-                    return userAccountHeader(snapshot.data);
+            StreamBuilder<FirebaseUser>(
+                stream: MainEventBus().get(context).streamUser,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return _userAccountHeader(snapshot.data);
                   }
-                  return CircularProgressIndicator();
-            }),
+
+                  return FutureBuilder(
+                    future: FirebaseAuth.instance.currentUser(),
+                    builder: (context, snapshot){
+                      if (snapshot.hasData) {
+                        return _userAccountHeader(snapshot.data);
+                      }
+                      return Center(child: CircularProgressIndicator());
+                  },);
+
+                }),
+            ListTile(
+              leading: Icon(Icons.edit),
+              title: Text("Editar"),
+              subtitle: Text("Alterar informações da conta"),
+              onTap: () => _onClickEditUser(context),
+            ),
             ListTile(
               leading: Icon(Icons.exit_to_app),
               title: Text("Sair"),
@@ -116,14 +146,15 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  UserAccountsDrawerHeader userAccountHeader(FirebaseUser user) {
+  _userAccountHeader(FirebaseUser user) {
     return UserAccountsDrawerHeader(
-            accountName: Text(user.displayName ?? ""),
-            accountEmail: Text(user.email),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(user.photoUrl ?? "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Bearded_Man-17-512.png"),
-            ),
-          );
+      accountName: Text(user.displayName ?? ""),
+      accountEmail: Text(user.email),
+      currentAccountPicture: CircleAvatar(
+        backgroundImage: NetworkImage(user.photoUrl ??
+            "https://cdn3.iconfinder.com/data/icons/avatars-15/64/_Bearded_Man-17-512.png"),
+      ),
+    );
   }
 
   _onClickLogout(BuildContext context) {
@@ -134,5 +165,12 @@ class _HomePageState extends State<HomePage>
 
   _onClickAddLocais(BuildContext context) {
     push(context, AddFocusFire());
+  }
+
+  _onClickEditUser(context) {
+    print("CLICK EDITAR CONTA");
+    FirebaseAuth.instance.currentUser().then((user) {
+      push(context, RegisterOrUpdate.withUser(user));
+    });
   }
 }

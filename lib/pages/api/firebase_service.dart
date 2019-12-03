@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/response_api.dart';
 
 String fireBaseUserUid;
@@ -11,7 +15,7 @@ class FirebaseService {
   final _googleSign = GoogleSignIn();
   final _auth = FirebaseAuth.instance;
 
-  Future<ResponseApi> loginWithEmailAndPassword(String email, String password) async {
+  Future<ResponseApi> loginWithEmailAndPassword(BuildContext context, String email, String password) async {
 
     try{
       AuthResult result = await _auth.signInWithEmailAndPassword(email: email, password: password);
@@ -20,6 +24,7 @@ class FirebaseService {
       print("Nome: ${user.displayName}");
       print("E-mail: ${user.email}");
       print("Foto: ${user.photoUrl}");
+      saveUser(context, user);
 
       return ResponseApi<FirebaseUser>.ok(result: user);
 
@@ -29,13 +34,37 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi> createUserWithEmailAndPassword(String email, String password, {String name, String urlPhoto}) async {
+  Future<ResponseApi> updateUser(BuildContext context, {name, urlPhoto}) async {
+
+    try{
+
+      final updateUser = UserUpdateInfo();
+      if(urlPhoto != null){
+        updateUser.photoUrl = urlPhoto;
+      }
+      updateUser.displayName = name ?? "";
+
+      var user = await FirebaseAuth.instance.currentUser();
+      user.updateProfile(updateUser);
+      saveUser(context, user);
+
+      return ResponseApi<FirebaseUser>.ok(result: user);
+
+    }catch(error){
+      print("Erro ao criar o usuário: ${error}");
+      return ResponseApi<FirebaseUser>.error(msg: error.toString());
+    }
+
+  }
+
+
+  Future<ResponseApi> createUserWithEmailAndPassword(BuildContext context, String email, String password, {String name, String urlPhoto}) async {
 
     try{
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       final FirebaseUser user = await result.user;
 
-      saveUser(user);
+      saveUser(context, user);
 
       if(name != null || urlPhoto != null){
         final updateUser = UserUpdateInfo();
@@ -56,7 +85,7 @@ class FirebaseService {
     }
   }
 
-  Future<ResponseApi> loginWithGoogle() async {
+  Future<ResponseApi> loginWithGoogle(BuildContext context) async {
 
     try{
 
@@ -71,7 +100,7 @@ class FirebaseService {
 
       AuthResult result = await _auth.signInWithCredential(credential);
       final FirebaseUser user = await result.user;
-      saveUser(user);
+      saveUser(context, user);
       print("Login realizado com sucesso!!!");
       print("Nome: ${user.displayName}");
       print("E-mail: ${user.email}");
@@ -86,11 +115,12 @@ class FirebaseService {
 
   }
 
-  void saveUser(FirebaseUser user){
+  void saveUser(BuildContext context, FirebaseUser user){
     if(user != null){
       fireBaseUserUid = user.uid;
       DocumentReference refUsers = Firestore.instance.collection("users").document(fireBaseUserUid);
       refUsers.setData({"name" : user.displayName, "e-mail" : user.email });
+      MainEventBus().get(context).updateUser(user);
     }
   }
 

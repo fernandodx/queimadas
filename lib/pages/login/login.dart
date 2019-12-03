@@ -1,6 +1,10 @@
+import 'dart:async';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/pages/login/login_bloc.dart';
 import 'package:queimadas/widgets/app_button_default.dart';
 import 'package:queimadas/widgets/app_text_default.dart';
@@ -13,9 +17,15 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final _bloc = LoginBloc();
 
+
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

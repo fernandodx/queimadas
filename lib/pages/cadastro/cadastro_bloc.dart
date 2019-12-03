@@ -1,44 +1,53 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
 import 'package:queimadas/pages/api/firebase_storage_service.dart';
 import 'package:queimadas/response_api.dart';
 import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:queimadas/utils/nav.dart';
-import 'package:queimadas/utils/prefs.dart';
 
 import '../home_page.dart';
 
 class CadastroBloc {
+  FirebaseUser user;
 
-  final _streamController = StreamController<Widget>();
+  CadastroBloc.withUser(this.user);
 
-  final nomeTextController = TextEditingController();
+  CadastroBloc();
+
+  String urlPhotoUser =
+      "http://cdn2.iconfinder.com/data/icons/online-shop-outline/100/objects-07-512.png";
+
+  final streamController = StreamController<Widget>();
+
+  final nameTextController = TextEditingController();
   final emailTextController = TextEditingController();
-  final senhaTextControlller = TextEditingController();
+  final passwordTextControlller = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
-
   final focusSenha = FocusNode();
 
-  Stream<Widget> get stremPicture => _streamController.stream;
+  Stream<Widget> get stremPicture => streamController.stream;
 
   void fetch() async {
-    final imgDefault = CachedNetworkImage(
-      imageUrl:
-      "https://cdn2.iconfinder.com/data/icons/online-shop-outline/100/objects-07-512.png",
+    if (user != null) {
+      urlPhotoUser = user.photoUrl;
+      nameTextController.text = user.displayName;
+      emailTextController.text = user.email;
+    }
+
+    final imgDefault = CircleAvatar(
+      radius: 70,
+      backgroundImage: NetworkImage(urlPhotoUser),
     );
 
-//    await Future.delayed(Duration(seconds: 4));
-
-    _streamController.add(imgDefault);
+    streamController.add(imgDefault);
   }
-
 
   String validatorCampoObrigatorio(String value) {
     if (value.isEmpty) {
@@ -57,40 +66,44 @@ class CadastroBloc {
     return null;
   }
 
-
-  onClickCadastrar(BuildContext context) async {
+  onClickSaveOrUpdate(BuildContext context) async {
     if (!formKey.currentState.validate()) {
       return;
     }
 
-    var nome = nomeTextController.text;
+    var nome = nameTextController.text;
     var email = emailTextController.text;
-    var pass = senhaTextControlller.text;
+    var pass = passwordTextControlller.text;
 
-    ResponseApi<FirebaseUser> response = await FirebaseService().createUserWithEmailAndPassword(email, pass,
-    name: nome);
+    ResponseApi<FirebaseUser> response;
 
-    if(response.ok){
+    if (user != null) {
+      response = await FirebaseService()
+          .updateUser(context, name: nome, urlPhoto: urlPhotoUser);
+    } else {
+      response = await FirebaseService().createUserWithEmailAndPassword(context,
+          email, pass,
+          name: nome, urlPhoto: urlPhotoUser);
+    }
+
+    if (response.ok) {
       push(context, HomePage(), isReplace: true);
-    }else{
+    } else {
       print('EXIBIR MSG ERRO');
       alertBottomSheet(context, msg: response.msg);
     }
-
   }
 
   onAddImage() async {
+    File image = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-   File image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    urlPhotoUser =
+        await FirebaseStorageService().uploadFile(image, id: "user_photo");
 
-   _streamController.add(Image.file(image));
-
-   FirebaseStorageService().uploadFile(image, id: "user_photo");
-
+    var circleImage = CircleAvatar(
+      radius: 70,
+      backgroundImage: Image.file(image).image,
+    );
+    streamController.add(circleImage);
   }
-
-
-
-
-
 }

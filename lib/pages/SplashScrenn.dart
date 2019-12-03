@@ -21,7 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
     var futureInit = Future.delayed(Duration(seconds: 3));
 
     Future.wait([futureInit]).then((listFutureCompleted) {
-      push(context, Login());
+      push(context, Login(), isReplace: true);
     });
 
     //OR home_page.dart
