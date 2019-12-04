@@ -35,7 +35,7 @@ class FirebaseService {
       AuthResult result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       final FirebaseUser user = await result.user;
 
-      _saveUser(user);
+      saveUser(user);
 
       if(name != null || urlPhoto != null){
         final updateUser = UserUpdateInfo();
@@ -71,7 +71,7 @@ class FirebaseService {
 
       AuthResult result = await _auth.signInWithCredential(credential);
       final FirebaseUser user = await result.user;
-      _saveUser(user);
+      saveUser(user);
       print("Login realizado com sucesso!!!");
       print("Nome: ${user.displayName}");
       print("E-mail: ${user.email}");
@@ -86,7 +86,7 @@ class FirebaseService {
 
   }
 
-  _saveUser(FirebaseUser user){
+  void saveUser(FirebaseUser user){
     if(user != null){
       fireBaseUserUid = user.uid;
       DocumentReference refUsers = Firestore.instance.collection("users").document(fireBaseUserUid);

@@ -59,7 +59,7 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
 
           if(snapshot.hasData){
 
-            var listaFocus = service.toList(snapshot);
+            List<FocusFire> listaFocus = service.toList(snapshot);
             if (listaFocus.isNotEmpty) {
               return _listaViewFocus(listaFocus);
             } else {
@@ -73,7 +73,7 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
             return TextError(snapshot.error);
           }
 
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
 
         });
 
