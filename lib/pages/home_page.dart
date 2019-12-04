@@ -12,6 +12,7 @@ import 'package:queimadas/pages/listaFocus/list_view_focus.dart';
 import 'package:queimadas/pages/listaFocus/list_view_monitor_focus.dart';
 import 'package:queimadas/pages/login/login.dart';
 import 'package:queimadas/pages/login/login_bloc.dart';
+import 'package:queimadas/pages/site/site_page.dart';
 import 'package:queimadas/utils/alert.dart';
 import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:queimadas/utils/nav.dart';
@@ -131,6 +132,12 @@ class _HomePageState extends State<HomePage>
               title: Text("Sair"),
               subtitle: Text("Finalizar sessão"),
               onTap: () => _onClickLogout(context),
+            ),
+            ListTile(
+              leading: Icon(Icons.web_asset),
+              title: Text("Visite o site"),
+              subtitle: Text("Site queimadas"),
+              onTap: () => _onClickViewSite(context),
             )
           ],
         ),
@@ -168,9 +175,15 @@ class _HomePageState extends State<HomePage>
   }
 
   _onClickEditUser(context) {
-    print("CLICK EDITAR CONTA");
+    Navigator.pop(context);
     FirebaseAuth.instance.currentUser().then((user) {
       push(context, RegisterOrUpdate.withUser(user));
     });
+  }
+
+  _onClickViewSite(BuildContext context) {
+    Navigator.pop(context);
+    push(context, SitePage());
+
   }
 }

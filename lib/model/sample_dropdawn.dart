@@ -6,6 +6,9 @@ class SampleDropdawn extends DropdownItem {
   String focusFire;
   int qtd;
 
+
+  SampleDropdawn(this.focusFire, this.qtd);
+
   @override
   String labelShow() {
     return "$focusFire - $qtd";

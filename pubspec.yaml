@@ -42,6 +42,7 @@ dependencies:
   cloud_firestore: ^0.12.10+2
   firebase_messaging: ^6.0.1
   firebase_storage: ^3.0.8
+  webview_flutter: ^0.3.17
 
 
 dev_dependencies:
