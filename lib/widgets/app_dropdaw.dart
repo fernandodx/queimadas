@@ -5,18 +5,20 @@ abstract class DropdownItem {
 }
 
 class AppDropDraw<T extends DropdownItem> extends StatelessWidget {
-  String text;
+  String hint;
   T valueSelected;
   ValueChanged<T> onChangeCallback;
   List<T> listaItens;
 
 
-  AppDropDraw(this.text, this.valueSelected, this.onChangeCallback,
+  AppDropDraw(this.hint, this.valueSelected, this.onChangeCallback,
       this.listaItens);
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton<T>(
+        hint: Text(hint),
+        value: valueSelected,
         items: getItems(),
         onChanged: (value){
           onChangeCallback(value);
