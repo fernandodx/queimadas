@@ -39,6 +39,10 @@
 	<string>É necessário da acesso ao microfone</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>É necessário da acesso a galeria.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Precisamos de acesso a sua localização.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Precisamos de acesso a sua localização sempre.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>processing</string>
