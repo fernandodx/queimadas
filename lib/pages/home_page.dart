@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
+import 'package:queimadas/app_config.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
 import 'package:queimadas/pages/addFocus/add_focus_fire.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
@@ -75,7 +77,7 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Queimadas"),
+        title: Text(AppConfig.title),
         bottom: TabBar(
           indicatorColor: Colors.grey,
           labelColor: Colors.white,

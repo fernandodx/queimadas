@@ -3,14 +3,16 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:queimadas/pages/api/firebase_service.dart';
+import 'package:queimadas/pages/basic_bloc.dart';
 import 'package:queimadas/pages/cadastro/cadastro.dart';
 import 'package:queimadas/response_api.dart';
+import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/prefs.dart';
 
 import '../home_page.dart';
 
-class LoginBloc {
+class LoginBloc extends BasicBloc {
 
   final emailTextController = TextEditingController();
 
@@ -49,9 +51,16 @@ class LoginBloc {
 
 
   onClickLogin(BuildContext context) async {
+
+    progress.showProgress();
+
       if (!formKey.currentState.validate()) {
+        progress.stopProgress();
         return;
       }
+
+      //Retorna valores dos campos
+      formKey.currentState.save();
 
       var email = emailTextController.text;
       var pass = senhaTextControlller.text;
@@ -62,13 +71,17 @@ class LoginBloc {
         saveDateLoginSharedPrefs(DateTime.now());
         push(context, HomePage(), isReplace: true);
       }else{
+        alertBottomSheet(context, msg: response.msg);
         print(response.msg);
       }
+
+      progress.stopProgress();
 
   }
 
   onClickLoginGoogle(BuildContext context) async {
 
+    progress.showProgress();
     ResponseApi<FirebaseUser> response = await FirebaseService().loginWithGoogle(context);
 
     if(response.ok){
@@ -78,10 +91,17 @@ class LoginBloc {
       print(response.msg);
     }
 
+    progress.stopProgress();
   }
 
   initSignIn(context) {
     push(context, RegisterOrUpdate());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
   }
 
 

@@ -3,7 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:queimadas/focus_fire.dart';
+import 'package:queimadas/pages/firestore/focus_fire_service.dart';
 import 'package:queimadas/utils/gps_util.dart';
+import 'package:queimadas/utils/nav.dart';
+import 'package:queimadas/utils/text_util.dart';
+import 'package:queimadas/widgets/list_view_fire.dart';
 
 class FocusMap extends StatefulWidget {
   @override
@@ -40,6 +45,17 @@ class _FocusMapState extends State<FocusMap> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.green[100],
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.green,
+              ),
+              onPressed: () => _searchMap()),
+        ],
+      ),
       body: FutureBuilder(
         future: lastLocationAndConfig(),
         builder: (context, snapshot) {
@@ -73,8 +89,10 @@ class _FocusMapState extends State<FocusMap> {
   }
 
   _initListenerLocation() async {
-
-    await gps.changeDefaultSettings(accuracy: LocationAccuracy.BALANCED, interval: 8000, distanceFilter: 100.0);
+    await gps.changeDefaultSettings(
+        accuracy: LocationAccuracy.BALANCED,
+        interval: 8000,
+        distanceFilter: 100.0);
 
     gps.onLocationChanged((LocationData data) {
       var latlng = LatLng(data.latitude, data.longitude);
@@ -136,5 +154,80 @@ class _FocusMapState extends State<FocusMap> {
 
   set listMarkers(List<Marker> value) {
     _listMarkers = value;
+  }
+
+  _searchMap() async {
+    final focusFire = await showSearch<FocusFire>(
+      context: context,
+      delegate: MapSearch(),
+    );
+
+    print("FOCUS SELECIONADO -> ${focusFire.country}");
+
+  }
+}
+
+class MapSearch extends SearchDelegate<FocusFire> {
+  //Icones da direita
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = "";
+        },
+      )
+    ];
+  }
+
+  //Icones esquerda
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query.length < 2) {
+      return Container(
+        color: Colors.white10,
+      );
+    }
+
+    FocusFireService service = FocusFireService();
+
+    return StreamBuilder(
+        stream: service.getMonitorFocusFire(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<FocusFire> listaFocus = service.toList(snapshot);
+            if (listaFocus.isNotEmpty) {
+              return ListViewFireFocus(
+                listaFocus,
+                onClick: (focus) {
+                  pop(context, focus);
+                },
+              );
+            } else {
+              return Center(
+                child:
+                    TextUtil.textDefault("Não Existe nenhum Focus encontrado"),
+              );
+            }
+          }
+
+          return Center(child: CircularProgressIndicator());
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+
   }
 }

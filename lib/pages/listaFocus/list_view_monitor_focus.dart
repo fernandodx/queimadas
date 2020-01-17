@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
@@ -56,9 +57,7 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
     return StreamBuilder(
         stream: service.getMonitorFocusFire(),
         builder: (context, snapshot) {
-
-          if(snapshot.hasData){
-
+          if (snapshot.hasData) {
             List<FocusFire> listaFocus = service.toList(snapshot);
             if (listaFocus.isNotEmpty) {
               return _listaViewFocus(listaFocus);
@@ -74,9 +73,7 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
           }
 
           return Center(child: CircularProgressIndicator());
-
         });
-
 
 //    ListaFocusModel listaFocusModel = Provider.of<ListaFocusModel>(context);
 
@@ -132,7 +129,7 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
                   children: <Widget>[
                     InkWell(
                       onLongPress: () => _onLongPressImage(),
-                      onTap: _onClick,
+                      onTap: () => _onClick(focus),
                       child: CachedNetworkImage(
                         imageUrl:
                             "https://as2.ftcdn.net/jpg/01/00/85/99/500_F_100859967_c6ZqB8d3nTyoupX79CanujbOJHLPtMiM.jpg",
@@ -145,9 +142,12 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
                       padding: EdgeInsets.all(8),
                       child: Row(
                         children: <Widget>[
-                          CachedNetworkImage(
-                              imageUrl:
-                                  "https://www.countryflags.io/br/flat/64.png"),
+                          Hero(
+                            tag: focus.country,
+                            child: CachedNetworkImage(
+                                imageUrl:
+                                    "https://www.countryflags.io/br/flat/64.png"),
+                          ),
                           Container(
                             margin: EdgeInsets.only(
                                 left: 12.0, top: 0, right: 0, bottom: 0),
@@ -181,11 +181,17 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
                         children: <Widget>[
                           IconButton(
                             onPressed: () => _onClickDetalhar(focus),
-                            icon: Icon(Icons.data_usage, color: Colors.lightGreen,),
+                            icon: Icon(
+                              Icons.data_usage,
+                              color: Colors.lightGreen,
+                            ),
                           ),
                           IconButton(
                             onPressed: () => _onClickMonitorarFocus(focus),
-                            icon: Icon(Icons.favorite_border, color: Colors.grey,),
+                            icon: Icon(
+                              Icons.favorite_border,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -214,11 +220,13 @@ class _ListViewMonitorFocusState extends State<ListViewMonitorFocus>
   }
 
   _onLongPressImage() {
-
     alertBottomSheet(context, msg: "On Long Press foi acionado.");
   }
 
-  void _onClick() {
+  void _onClick(focus) {
+
+    print("Click : $focus");
+
   }
 
   _onClickMonitorarFocus(FocusFire focus) {

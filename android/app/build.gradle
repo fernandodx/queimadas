@@ -48,6 +48,22 @@ android {
 //        multiDexEnable true
     }
 
+    flavorDimensions "version"
+
+    productFlavors {
+
+        homol {
+            dimension "version"
+//            applicationIdSuffix ".homol"
+//            versionNameSuffix "-homol"
+        }
+
+        prod {
+            dimension "version"
+        }
+
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.

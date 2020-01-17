@@ -42,9 +42,11 @@ class AppButtonDefault extends StatelessWidget {
 
   Widget getTextButton() {
     if (isShowProgress) {
-      return Center(
-        child: CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.white),
+      return Container(
+        child: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(Colors.white),
+          ),
         ),
       );
     }

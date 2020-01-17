@@ -34,6 +34,8 @@ dependencies:
   google_maps_flutter: ^0.5.21+8
   flutter_auth_buttons: ^0.6.0
   location: ^2.3.5
+  bloc_pattern: ^2.5.1
+  flare_flutter: ^1.8.3
 
   #Firebase
   firebase_core: ^0.4.1+5
@@ -61,6 +63,10 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - assets/animations/
+    - assets/documents/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

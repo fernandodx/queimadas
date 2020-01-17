@@ -30,7 +30,7 @@ class FirebaseService {
 
     }catch(error){
       print("Login with Google error: $error");
-      return ResponseApi.error(msg: error.toString());
+      return ResponseApi<FirebaseUser>.error(msg: error.toString());
     }
   }
 

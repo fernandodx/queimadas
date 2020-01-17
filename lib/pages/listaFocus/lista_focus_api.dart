@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:queimadas/focus_fire.dart';
 import 'package:queimadas/pages/firestore/focus_fire_service.dart';
@@ -17,6 +18,8 @@ class ListaFocusApi {
    try{
 
      await Future.delayed(Duration(seconds: 1));
+
+     String fakejson = await rootBundle.loadString("assets/documents/fake.json");
 
      var url = 'http://queimadas.dgi.inpe.br/queimadas/dados-abertos/api/focos/count';
 

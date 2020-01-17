@@ -7,3 +7,8 @@ Future push(BuildContext context, Widget page, {bool isReplace = false}) {
   }
   return Navigator.push(context, MaterialPageRoute(builder: (context) => page));
 }
+
+
+bool pop(BuildContext context, result) {
+  return Navigator.pop(context, result);
+}

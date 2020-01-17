@@ -10,6 +10,7 @@ class AppTextDefault extends StatelessWidget {
   TextInputAction inputAction;
   FocusNode focus;
   FocusNode nextFocus;
+  Function onSaved;
 
   AppTextDefault(
       {@required this.name,
@@ -20,7 +21,8 @@ class AppTextDefault extends StatelessWidget {
       this.inputType,
       this.inputAction,
       this.focus,
-      this.nextFocus});
+      this.nextFocus,
+      this.onSaved});
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class AppTextDefault extends StatelessWidget {
       keyboardType: inputType,
       focusNode: focus,
       textInputAction: inputAction,
+      onSaved: onSaved,
       onFieldSubmitted: (value) {
         print(value);
         if (nextFocus != null) {

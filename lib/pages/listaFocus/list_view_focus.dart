@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
@@ -8,12 +9,9 @@ import 'package:queimadas/model/lista_focus_model.dart';
 import 'package:queimadas/pages/detalheFocus/detalhe_focus.dart';
 import 'package:queimadas/pages/firestore/focus_fire_service.dart';
 import 'package:queimadas/pages/listaFocus/lista_focus_bloc.dart';
-import 'package:queimadas/response_api.dart';
 import 'package:queimadas/utils/alert_bottom_sheet.dart';
 import 'package:queimadas/utils/nav.dart';
 import 'package:queimadas/utils/text_util.dart';
-import 'package:queimadas/widgets/app_text_default.dart';
-import 'package:queimadas/widgets/text_error.dart';
 
 import '../../focus_fire.dart';
 
@@ -59,7 +57,8 @@ class _ListViewFocusState extends State<ListViewFocus>
     }
 
     if (listaFocusModel.listaFocusFire.isNotEmpty) {
-      return _listaViewFocus(listaFocusModel.listaFocusFire);
+      return _listaViewFocus(listaFocusModel.listaFocusFire,
+          scrollController: _bloc.scrollController);
     } else {
       return Center(
         child: TextUtil.textDefault("Não Existe nenhum Focus de fogo"),
@@ -89,11 +88,12 @@ class _ListViewFocusState extends State<ListViewFocus>
     push(context, DetalheFocus(focus));
   }
 
-  _listaViewFocus(List<FocusFire> listaFocus) {
+  _listaViewFocus(List<FocusFire> listaFocus, {scrollController}) {
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: Container(
         child: ListView.builder(
+            controller: scrollController,
             itemCount: listaFocus.length,
             itemBuilder: (context, index) {
               FocusFire focus = listaFocus[index];
@@ -154,23 +154,36 @@ class _ListViewFocusState extends State<ListViewFocus>
                         children: <Widget>[
                           IconButton(
                             onPressed: () => _onClickDetalhar(focus),
-                            icon: Icon(Icons.data_usage, color: Colors.lightGreen,),
+                            icon: Icon(
+                              Icons.data_usage,
+                              color: Colors.lightGreen,
+                            ),
                           ),
                           StreamBuilder<bool>(
                               stream: _bloc.streamFavorito,
-                              builder: (context,  snapshot) {
-
+                              builder: (context, snapshot) {
                                 ColorSwatch colorFavorite = Colors.grey;
-                                if(snapshot.hasData && snapshot.data){
-                                  colorFavorite = Colors.redAccent;
-                                }
+                                String animation = "Like";
+//                                if (snapshot.hasData && snapshot.data) {
+//                                  colorFavorite = Colors.redAccent;
+//                                  animation = "Dislike";
+//                                }
+
+//                                return InkWell(
+//                                  onTap: () => _onClickMonitorarFocus(focus),
+//                                  child: FlareActor(
+//                                    "assets/animations/like_animation.flr",
+//                                    color: colorFavorite,
+//                                    shouldClip: false,
+//                                    animation: animation,
+//                                  ),
+//                                );
 
                                 return IconButton(
                                   onPressed: () => _onClickMonitorarFocus(focus),
                                   icon: Icon(Icons.favorite_border, color: colorFavorite,),
                                 );
-                              }
-                          )
+                              })
                         ],
                       ),
                     ),
@@ -198,12 +211,10 @@ class _ListViewFocusState extends State<ListViewFocus>
   }
 
   _onLongPressImage() {
-
     alertBottomSheet(context, msg: "On Long Press foi acionado.");
   }
 
-  void _onClick() {
-  }
+  void _onClick() {}
 
   _onClickMonitorarFocus(FocusFire focus) async {
     var isExiste = await FocusFireService().saveMonitorFocus(focus);

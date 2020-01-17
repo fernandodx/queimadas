@@ -4,7 +4,6 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:queimadas/app_config.dart';
 import 'package:queimadas/eventbus/main_event_bus.dart';
@@ -18,8 +17,12 @@ import 'package:queimadas/pages/login/login_bloc.dart';
 
 void main() {
 
-  AppConfig.title = "Queimadas";
-  AppConfig.urlAmbiente = "PROD";
+  AppConfig.title = "Queimadas - Homol";
+  AppConfig.urlAmbiente = "HOMOL";
+
+  //Para dar build
+  //flutter build apk --flavor prod -t lib/main.dart
+  //flutter build apk --flavor homol -t lib/main_homol.dart
 
 
   runApp(MyApp());
@@ -42,7 +45,6 @@ class _MyAppState extends State<MyApp> {
     _initDefaultFirebaseRemoteConfig();
     _initFcm();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) => print("ON FINISH - TELA CRIADA"));
 
   }
 

@@ -12,7 +12,7 @@ class DetailFocusBloc {
 
   fetch() async {
 
-    var response = await ListaFocusApi.findFocusDetail("Brasil");
+//    var response = await ListaFocusApi.findFocusDetail("Brasil");
 
 
 
